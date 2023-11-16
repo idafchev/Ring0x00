@@ -106,7 +106,7 @@ analytics:
 author:
   name             : "Ilia Dafchev"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Security Researcher \\| Threat Research, Malware Analysis, RE, DFIR \\| Sometimes exploring offensive research"
+  bio              : "Security Researcher \\| Threat Research, Malware Analysis, RE, DFIR"
   location         : "Bulgaria"
   email            :
   twitter          : "iliyadafchev"
