@@ -17,7 +17,7 @@ minimal_mistakes_skin    : "neon" # "air", "aqua", "contrast", "dark", "dirt", "
 # Site Settings
 locale                   : "en-US"
 title                    : "Ring 0x00"
-title_separator          : "-"
+title_separator          : "|" #"-"
 subtitle                 : "One ring to rule them all!"
 name                     : "Ilia Dafchev"
 description              : "Technical blog"
@@ -292,3 +292,11 @@ defaults:
       comments: # true
       share: true
       related: true
+
+  #_pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true
