@@ -105,7 +105,7 @@ analytics:
 # Site Author
 author:
   name             : "Ilia Dafchev"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/unicorn.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Security Researcher \\| Threat Research, Malware Analysis, RE, DFIR"
   location         : "Bulgaria"
   email            :
@@ -294,6 +294,7 @@ defaults:
       related: true
       show_date: true
       classes: wide
+      
 
   #_pages
   - scope:
