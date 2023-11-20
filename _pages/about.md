@@ -12,7 +12,7 @@ In my blog I like to write down the things I learn, because if you can explain s
 
 Any feedback about the articles is welcome :)
 
-I wanted to change the theme of my blog, but didn't want to mess up the SEO of existing articles or break any references used to my articles, therefore I'll keep it as a separate blog and if I have time I'll migrate my previous articles to this one.
+**PS:** I wanted to change the theme of my blog, but didn't want to mess up the SEO of existing articles or break any existing references used to my articles. Therefore, for now at least, I'll keep it as a second blog and if I have time I'll migrate my previous articles to this one. [Link to my old blog](https://idafchev.github.io/blog_posts).
 {: .notice--info}
 
 
