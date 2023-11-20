@@ -117,7 +117,7 @@ author:
       # url: "mailto:your.name@email.com"
     - label: "Old Blog"
       icon: "fas fa-fw fa-link"
-      url: "https://idafchev.github.io/"
+      url: "https://idafchev.github.io/blog_posts"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       # url: "https://twitter.com/"
