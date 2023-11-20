@@ -294,6 +294,7 @@ defaults:
       related: true
       show_date: true
       classes: wide
+      teaser: "/assets/images/hacker_cat.jpeg"
       
 
   #_pages
