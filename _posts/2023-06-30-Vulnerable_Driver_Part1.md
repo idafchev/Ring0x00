@@ -131,18 +131,18 @@ IOCTLs are not just arbitrary numbers; they are 32-bit values with multiple fiel
 
 When examining IOCTLs, it's important to consider the specific fields that compose the value.  
 
-**DeviceType** - this field has reserved values below 0x8000 for Microsoft, while values starting from 0x8000 and higher are typically assigned to third-party vendors. The "common" bit is part of the device type and is set for vendor-assigned types, resulting in a value of 0x8000. This is according to the documentation, but people can choose not to follow it.  
+`DeviceType` - this field has reserved values below 0x8000 for Microsoft, while values starting from 0x8000 and higher are typically assigned to third-party vendors. The "common" bit is part of the device type and is set for vendor-assigned types, resulting in a value of 0x8000. This is according to the documentation, but people can choose not to follow it.  
 
-**RequiredAccess** - indicates the access rights the caller should request when opening the file object representing the device. It can take the following values:  
+`RequiredAccess` - indicates the access rights the caller should request when opening the file object representing the device. It can take the following values:  
 
 00 (FILE_ANY_ACCESS) - The IRP is sent if the caller has any access rights.  
 01 (FILE_READ_DATA) - The IRP is sent if the caller has read-access rights.  
 10 (FILE_WRITE_DATA) - The IRP is sent if the caller has write-access rights.  
 11 (FILE_READ_DATA and FILE_WRITE_DATA ) - Both read and write access rights are required for the IRP to be processed.  
 
-**FunctionCode** - specifies the specific function to be called. Values below 0x800 are reserved for Microsoft, while values at or above 0x800 (when the Custom bit is set) can be used by third-party vendors. Again, this is according to the documentation, which may not be followed.  
+`FunctionCode` - specifies the specific function to be called. Values below 0x800 are reserved for Microsoft, while values at or above 0x800 (when the Custom bit is set) can be used by third-party vendors. Again, this is according to the documentation, which may not be followed.  
 
-**TransferType** - determines how the operating system passes data between the caller and the driver handling the IRP. There are four transfer types:  
+`TransferType` - determines how the operating system passes data between the caller and the driver handling the IRP. There are four transfer types:  
 
 11 (METHOD_NEITHER) – data is passed in user-defined input and output buffers without any checks on the buffers or their size. The user application allocates memory in its own address space in userland and sends pointers to the buffers in the IRP. Upon receiving the IRP packet, the driver can read data from the input buffer and write data to the output buffer. The user application then retrieves the driver's response from the output buffer. It's important to note that this method carries a potential risk, as the pointers sent by the user are entirely under their control. Without proper validation on the driver side, the driver may inadvertently read from or write to sensitive system memory.  
 
