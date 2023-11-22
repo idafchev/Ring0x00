@@ -38,7 +38,6 @@ If you're interested, you can check the EKANS string decrypton tool I wrote:
 ---
 
 ## <a name="21_basic_static_analysis"></a> 2.1. Basic static analysis  
----
 The binary contains lots of strings referencing Go source files. The reason for this is that the EKANS malware is written in the Go programming language.  
 ![bintext](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot01.png){: .align-center}  
 
@@ -51,7 +50,7 @@ I used the [Go Reverse Engineering Toolkit](https://go-re.tk/gore/) library to w
 Unfortunately, EKANS has all its non-library functions obfuscated.  
 ![bintext](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot02.png){: .align-center}  
 
-Another thing that can be seen from the strings is the Go project folder, which sits under the path `C:\Users\Admin3\\`, meaning that the username the attackers used on their development machine was `Admin3`.  
+Another thing that can be seen from the strings is the Go project folder, which sits under the path `C:\Users\Admin3\`, meaning that the username the attackers used on their development machine was `Admin3`.  
 ![bintext](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot03.png){: .align-center}  
 
 Checking the entropy with Detect It Easy, we can make an assumtion that the binary is not packed.  
@@ -61,7 +60,6 @@ With the help of [redress](https://go-re.tk/redress/) we check that it was compi
 ![entropy](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot05.png){: .align-center}  
 
 ## <a name="22_encrypted_strings"></a>2.2. Encrypted strings  
----
 Almost all strings which are used by the program logic of EKANS are encrypted using a simple XOR cipher.
 Every string is encrypted using different key and has its own dedicated function which decrypts that string specifically. This means that there are as many string decryption functions as there are strings (over 2000).
 
@@ -74,7 +72,6 @@ And here's the implementation in python:
 I wrote a string decryption tool which decrypts all the strings in the binary. It can also create an IDA IDC script in order to rename all decryption routines. The script is available at: [https://github.com/idafchev/EKANS-String-Decryptor](https://github.com/idafchev/EKANS-String-Decryptor)
 
 ## <a name="23_environmental_awareness"></a> 2.3 Environmental awareness  
----
 One of the first things EKANS ransomware does is to lookup the IP address of a hardcoded domain name, which belongs to the victim. Unlike other strings, the domain name is stored in plaintext.
 ![ip lookup](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot09.png){: .align-center}  
 
@@ -98,17 +95,15 @@ In order to check if the host is a domain controller, EKANS compares if the valu
 If the host is a domain controller the malware does not encrypt the files. Instead it drops the ransom note and exits. If the host is not a domain controller, then it proceeds with encrypting the files and without leaving a ransom note.  
 ![domain controller check](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot12.png){: .align-center}  
 
-It also creates a global mutex called `EKANS` in order to prevent several instances of the malware to run at the same time. If another instance is already running, the string `There can be only one`, is decrypted and execution stops. The string looks like a reference to the movie Highlander, though it might not be intentional.  
+It also creates a global mutex called `EKANS` in order to prevent several instances of the malware to run at the same time. If another instance is already running, the string `"There can be only one"`, is decrypted and execution stops. The string looks like a reference to the movie Highlander, though it might not be intentional.  
 ![there can be only one](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot13.png){: .align-center}  
 
 ## <a name="24_ransom_note"></a> 2.4 Ransom note  
----
 The ransom note is dropped only on domain controllers. It’s written in the paths `C:\Users\Public\Desktop\Decrypt-Your-Files.txt` and `C:\Decrypt-Your-Files.txt`  
 Interestingly it does not contain how much ransom the attackers want.  
 ![ransom note](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot06.png){: .align-center}  
 
 ## <a name="25_network"></a> 2.5 Blocking network communication  
----
 Before proceeding further, the malware blocks all inbound and outbound network communication.  In order to do this, it executes the following two commands:  
 ```
 netsh advfirewall set allprofiles firewallpolicy blockinbound,blockoutbound
@@ -118,7 +113,7 @@ netsh advfirewall set allprofiles state on
 Below you can see the strings which get decrypted and then concatenated in order to construct the commands.  
 ![firewall off](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot14.png){: .align-center}  
 
-The resulting command is then executed with os.exec.Command().Run()  
+The resulting command is then executed with `os.exec.Command().Run()`  
 ![firewall off](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot15.png){: .align-center}  
 
 This behaviour can also be seen with Process Monitor, during basic dynamic analysis:  
@@ -127,7 +122,6 @@ This behaviour can also be seen with Process Monitor, during basic dynamic analy
 ![firewall off](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot17.png){: .align-center}  
 
 ## <a name="26_services"></a> 2.6 Service and process termination  
----
 Once all network communication is blocked, it starts searching for specific service and process names running on the host. If a match is found it tries to terminate them.  
 
 It contains an exhaustive list of services and processes. The number of services which are searched for is over 300 and the number of processes is over 1100. Only a very small subset of those are included in this blog post. Many of those are services/processes related to anti-malware software, backup and database software, log collectors and forwarders, etc. There are also some ordinary user processes in the list, like steam.exe, MS Office applications and web browsers.  
@@ -173,7 +167,6 @@ msmpeng.exe
 ```
 
 ## <a name="27_vsc"></a> 2.7 Deleting Volume Shadow Copies  
----
 EKANS then queries WMI using the WQL query `SELECT * FROM Win32_ShadowCopy` to enumerate any existing volume shadow copies (VSC). After the VSC enumeration, it proceeds with their deletion, again using WMI.
 
 This can be seen from the output from API Monitor during dynamic analysis.  
@@ -183,7 +176,6 @@ We're approaching the end of EKANS. The final function calls in the main functio
 ![end of main function](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot20.png){: .align-center}  
 
 ## <a name="28_encryption"></a> 2.8 Encryption  
----
 Before the actual encryption, strings representing file extensions, folders and files are decrypted. These are used to check which files to encrypt and which files or folder to exclude.  
 
 Some system files and folders are excluded from encryption to prevent the system from crashing and thus interrupting the encryption process.  
@@ -194,35 +186,35 @@ EKANS enumerates the logical drives and then starts walking the filesystem on ea
 When the encryption starts, EKANS waits for all encryption threads to finish and all files to be encrypted. After that it iterates through all encrypted files and starts renaming them.  
 ![rename files](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot36.png){: .align-center}  
 
-Each file is checked if it is already encrypted by checking whether it has the `EKANS` signature at the end of the file. Files which are already encrypted are skipped.  
+Each file is checked if it is already encrypted by checking whether it has the `"EKANS"` signature at the end of the file. Files which are already encrypted are skipped.  
 
 New `16-byte` Initialization Vector (IV) and `256bit` key are generated for **each** file, so each file is encrypted using different key. The IV and key are generated using the `rand.Read()` function which on Windows systems uses the `CryptGenRandom` WinAPI function internally.[2]
 
 Files which are already encrypted are skipped:  
 ![skip encrypted files](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot24.png){: .align-center}  
 
-Generating 16-byte IV using rand.Read():  
+Generating 16-byte IV using `rand.Read()`:  
 ![generating IV](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot25.png){: .align-center}  
 
-Generating 256bit AES key using rand.Read():  
+Generating 256bit AES key using `rand.Read()`:  
 ![generating AES Key](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot26.png){: .align-center}  
 
-The AES algorithm is used in CTR mode and the contents of the files are encrypted using the method `ctr.XORKeyStream()`. The contents of the files are read in chunks of 0x19000 bytes and when all data in the file is encrypted, they get overwritten with the new content.
+The AES algorithm is used in CTR mode and the contents of the files are encrypted using the method `ctr.XORKeyStream()`. The contents of the files are read in chunks of `0x19000` bytes and when all data in the file is encrypted, they get overwritten with the new content.
 
 AES in CTR mode:  
 ![aes ctr mode](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot27.png){: .align-center}  
 
-Files are read in 0x19000 byte chunks:  
+Files are read in `0x19000` byte chunks:  
 ![aes chunks](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot28.png){: .align-center}  
 
-Encrypting the buffer with ctr.XORKeyStream method:  
+Encrypting the buffer with `ctr.XORKeyStream` method:  
 ![aes ctr encrypt](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot29.png){: .align-center}  
 
 After the file is encrypted, the AES key gets encrypted using the `rsa.EncryptOAEP` function. OAEP stands for Optimal Asymmetric Encryption Padding which is a padding scheme for RSA which adds a level of randomness to the algorithm. 
 
 EKANS then appends a structure to the end of the file containing the original filename, IV and encrypted AES key. The structure is in a gob encoding which is a binary go-specific encoding used for serialization. The low level details about the encoding are described in the go documentation.[3][4]
 
-The encryption of the AES key with the rsa.EncryptOAEP function:  
+The encryption of the AES key with the `rsa.EncryptOAEP` function:  
 ![rsa](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot32.png){: .align-center}  
 
 Data is appended at the end of the file using gob:  
@@ -234,8 +226,7 @@ netsh advfirewall set allprofiles state off
 ```
 
 ## <a name="29_encrypted_files"></a> 2.9 Encrypted files  
----
-The structure which is appended to the end of the encrypted files is shown below. At the end the “EKANS” signature is appended and before that is the size of the gob structure in little-endian format.  
+The structure which is appended to the end of the encrypted files is shown below. At the end the `“EKANS”` signature is appended and before that is the size of the gob structure in little-endian format.  
 ![file format](https://idafchev.github.io/blog/assets/images/ekans/ekans_screenshot37a.png){: .align-center}  
 
 The coloured regions in the picture are as follows:  
