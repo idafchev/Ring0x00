@@ -24,7 +24,6 @@ When it comes to kernel debugging, it is crucial to understand that when a break
 I am using VMware Workstation but other hypervisors should have similar options.  
 
 ## Kernel debugging with network communication (Recommended)  
----
 2.1. Install a Windows VM and create a snapshot of its clean state  
 2.2. Make sure the VM is using NAT networking  
 2.3. Find your Host OS IP address  
@@ -57,7 +56,6 @@ bcdedit /set "{dbgsettings}" busparams 8.0.0
 ```
 
 ## Kernel debugging with named pipes for communication (Slow)  
----
 2.1. Install a Windows VM and create a snapshot of its clean state  
 2.2. In VMware from the VM settings add a new Serial Port from `Hardware > Add > Serial Port`  
   
