@@ -33,7 +33,7 @@ When it comes to representing a running process, two important data structures c
 
 The `KPROCESS` structure, on the other hand, is an internal kernel-level structure that represents a process. It contains information relevant to the kernel, such as the process ID, thread list, memory management details, and processor state. The `KPROCESS` structure is embedded and stored inside the `EPROCESS` structure as its first field – `Pcb`, allowing access to the kernel-level process information when needed. Each process on the system has its corresponding `EPRROCESS` and `KPROCESS` structures.  
 
-![Windows Architecture](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Windows_nt_architecture.png)
+![Windows Architecture](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Windows_nt_architecture.png){: .align-center}  
 *source: https://en.wikipedia.org/wiki/Architecture_of_Windows_NT*  
 
 `EPROCESS` is a crucial component in the token stealing technique. The fields of the sctructure can be explored with Windbg using the `dt nt!_EPROCESS` command.  
