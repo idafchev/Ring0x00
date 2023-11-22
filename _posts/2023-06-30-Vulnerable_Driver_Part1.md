@@ -299,7 +299,7 @@ Additionally, there is a single handler function for IRP major codes [IRP_MJ_CRE
 ![Ghidra analysis 2](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Ghidra_1.png){: .align-center}  
 
 Now lets check the code for the handler function which is in the next screenshot.  
-Some lines of code were still not decompiled correctly. For example like *Power.ShutdownType* (which from my educated guess should be the BufferLength) or *QueryDirectory.FileIndex*. I tried to set the proper type manually but for some reason it didn't work.  
+Some lines of code were still not decompiled correctly. For example like `Power.ShutdownType` (which from my educated guess should be the BufferLength) or `QueryDirectory.FileIndex`. I tried to set the proper type manually but for some reason it didn't work.  
 
 The function handles different IRP types, so there is an IF checking the Major code and if it is of type `IRP_MJ_DEVICE_CONTROL` we enter a large switch statement which checks the recieved IOCTL code.  
 
@@ -308,16 +308,16 @@ The function handles different IRP types, so there is an IF checking the Major c
 The IOCTL codes used by PPLControl are `0x80002048` and `0x8000204c` so lets go straight to them. The next screenshot shows the code for IOCTL `0x80002048` where I already renamed the important variables.  
 
 In this code, we can observe several checks that provide hints about the variables' meanings:  
-1. The check for 0x30 suggests that it represents the buffer length, as later in the code, 0x30 is assigned to `IRP->IoStatus.Information`, specifying the number of bytes to be returned.   
-2. The comparison of the value at the 8th byte of the SystemBuffer structure to a NULL pointer suggests that it is likely an address.  
-3. Inside some if/elseif blocks, the value at byte 0x14 is added to the address, and the resulting value is dereferenced. This indicates a reading operation from an address, with the value at 0x14 being an offset from the supplied address.  
-4. The conditions of the if/elseif statements compare the value at offset 0x18 in the SystemBuffer to 1, 2, or 4. The dereferenced expressions inside these conditions are cast to byte, ushort, or ulonglong, respectively. This suggests that the value at 0x18 of the SystemBuffer structure represents the size to be read.  
+1. The check for `0x30` suggests that it represents the buffer length, as later in the code, `0x30` is assigned to `IRP->IoStatus.Information`, specifying the number of bytes to be returned.   
+2. The comparison of the value at the 8th byte of the `SystemBuffer` structure to a NULL pointer suggests that it is likely an address.  
+3. Inside some if/elseif blocks, the value at byte `0x14` is added to the address, and the resulting value is dereferenced. This indicates a reading operation from an address, with the value at `0x14` being an offset from the supplied address.  
+4. The conditions of the if/elseif statements compare the value at offset `0x18` in the `SystemBuffer` to 1, 2, or 4. The dereferenced expressions inside these conditions are cast to byte, ushort, or ulonglong, respectively. This suggests that the value at `0x18` of the `SystemBuffer` structure represents the size to be read.  
 
-If the IOCTL completes successfully, *IRP->IoStatus.Status* is set to 0 (succcess) and the *IRP->IoStatus.Information* is set to 0x30 to return the whole buffer.  
+If the IOCTL completes successfully, `IRP->IoStatus.Status` is set to 0 (succcess) and the `IRP->IoStatus.Information` is set to `0x30` to return the whole buffer.  
 
 ![Ghidra analysis 4](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Ghidra_3.png){: .align-center}  
 
-The IOCTL accepts a buffer of 0x30 bytes, which corresponds to the following structure. In this structure, the calling application specifies an address and the number of bytes to be read from that address. The driver reads the value from the address, writes it back in the structure, and returns it. This allows an arbitrary read functionality with kernel-level privileges which can be requested by everyone.     
+The IOCTL accepts a buffer of `0x30` bytes, which corresponds to the following structure. In this structure, the calling application specifies an address and the number of bytes to be read from that address. The driver reads the value from the address, writes it back in the structure, and returns it. This allows an arbitrary read functionality with kernel-level privileges which can be requested by everyone.     
 ```c
 struct RTC64 {
 	BYTE Unknown0[8];  // offset 0x00
@@ -330,11 +330,11 @@ struct RTC64 {
 };
 ```
 
-The next IOCTL `0x8000204c` looks almost the same but the expression inside the if/elseif body is reversed. The value at field 0x1c gets assigned to the address (field 0x14 + Address), meaning this is a write operation. Therefore, this IOCTL provides arbitray write capability with kernel privileges.  
+The next IOCTL `0x8000204c` looks almost the same but the expression inside the if/elseif body is reversed. The value at field `0x1c` gets assigned to the address (field 0x14 + Address), meaning this is a write operation. Therefore, this IOCTL provides arbitray write capability with kernel privileges.  
 
 ![Ghidra analysis 5](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Ghidra_4.png){: .align-center}  
 
-Now, let's examine how this vulnerability was fixed in the latest version of MSI Afterburner. The `DriverEntry` function now uses `IoCreateDeviceSecure` with an SDDL string that grants GENERIC_ALL access to the device only for the SYSTEM account and members of the Administrators group. Other users cannot interact with the device.  
+Now, let's examine how this vulnerability was fixed in the latest version of MSI Afterburner. The `DriverEntry` function now uses `IoCreateDeviceSecure` with an SDDL string that grants `GENERIC_ALL` access to the device only for the SYSTEM account and members of the Administrators group. Other users cannot interact with the device.  
 
 ![Ghidra analysis 6](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Ghidra_5.png){: .align-center}  
 
@@ -364,7 +364,7 @@ typedef struct RTC64_MEMORY_STRUCT {
 	BYTE Unknown2[16]; // offset 0x20
 }RTC64_MEMORY_STRUCT, * PRTC64_MEMORY_STRUCT;
 ```
-Next, we create the function responsible for opening the device. It uses `CreateFileW` to obtain a handle to the symbolic link of the RTCore64 device:  
+Next, we create the function responsible for opening the device. It uses `CreateFileW` to obtain a handle to the symbolic link of the `RTCore64` device:  
 
 ```c
 HANDLE hDevice = NULL;
@@ -451,7 +451,7 @@ BOOL RTCoreReadMemory(ULONG_PTR Address, DWORD ValueSize, PDWORD Value) {
 	return TRUE;
 }
 ```
-Now, let's define several wrapper functions that use the primitive function to read data of different sizes, such as byte, word, dword, qword, and pointer. We'll use RTCoreRead32 as the base for the other functions, making it easier to extract the relevant byte for functions like RTCoreRead8 by performing an AND operation:  
+Now, let's define several wrapper functions that use the primitive function to read data of different sizes, such as byte, word, dword, qword, and pointer. We'll use `RTCoreRead32` as the base for the other functions, making it easier to extract the relevant byte for functions like `RTCoreRead8` by performing an AND operation:  
 
 ```c
 BOOL RTCoreRead32(ULONG_PTR Address, PDWORD Value) {
@@ -593,7 +593,7 @@ int main() {
 
 Compile it statically and lets run it on the VM with debugger attached to find an address to read and verify the value is read correctly.   
 
-From Windbg I decided to read the third DWORD after the address of the System process - 0x9fa86048.  
+From Windbg I decided to read the third DWORD after the address of the System process - `0x9fa86048`.  
 
 ![Windbg](https://idafchev.github.io/blog/assets/images/driver_vulnerability/read_test_windbg.png){: .align-center}  
 
