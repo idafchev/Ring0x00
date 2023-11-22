@@ -611,7 +611,7 @@ While writing these posts and researching the different driver vulnerabilities, 
 2. [https://github.com/RedCursorSecurityConsulting/PPLKiller](https://github.com/RedCursorSecurityConsulting/PPLKiller)  
 3. [https://github.com/Barakat/CVE-2019-16098](https://github.com/Barakat/CVE-2019-16098)  
 4. [https://github.com/microsoft/Windows-driver-samples/blob/main/general/ioctl/wdm/sys/sioctl.c](https://github.com/microsoft/Windows-driver-samples/blob/main/general/ioctl/wdm/sys/sioctl.c)  
-5. [https://github.com/hacksysteam/HackSysExtremeVulnerableDriver/blob/master/Driver/HEVD/Windows/HackSysExtremeVulnerableDriver.c](https://github.com/hacksysteam/HackSysExtremeVulnerableDriver/blob/master/Driver/HEVD/Windows/HackSysExtremeVulnerableDriver.c)  
+5. [https://github.com/hacksysteam/HackSysExtremeVulnerableDriver](https://github.com/hacksysteam/HackSysExtremeVulnerableDriver/blob/master/Driver/HEVD/Windows/HackSysExtremeVulnerableDriver.c)  
 6. [https://github.com/LordNoteworthy/windows-internals/blob/master/IRP%20Major%20Functions%20List.md](https://github.com/LordNoteworthy/windows-internals/blob/master/IRP%20Major%20Functions%20List.md)  
 7. [https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes)  
 8. [https://www-user.tu-chemnitz.de/~heha/oney_wdm/ch02c.htm](https://www-user.tu-chemnitz.de/~heha/oney_wdm/ch02c.htm)  
