@@ -16,7 +16,7 @@ title:  "Basics of Windows shellcode writing"
 
 # <a name="introduction"></a> Introduction  
 ---
-This tutorial is for x86 32bit shellcode. Windows shellcode is a lot harder to write than the shellcode for Linux and you'll see why. First we need a basic understanding of the Windows architecture, which is shown below. Take a good look at it. Everything above the dividing line is in User mode and everything below is in Kernel mode.  
+This tutorial is for `x86 32bit` shellcode. Windows shellcode is a lot harder to write than the shellcode for Linux and you'll see why. First we need a basic understanding of the Windows architecture, which is shown below. Take a good look at it. Everything above the dividing line is in User mode and everything below is in Kernel mode.  
 
 ![windows_architecture](https://idafchev.github.io/blog/assets/images/windows_shellcode/windows_architecture.png){: .align-center}  
 Image Source: [https://blogs.msdn.microsoft.com/hanybarakat/2007/02/25/deeper-into-windows-architecture/](https://blogs.msdn.microsoft.com/hanybarakat/2007/02/25/deeper-into-windows-architecture/)
