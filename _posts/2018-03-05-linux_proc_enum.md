@@ -14,10 +14,10 @@ title:  "Linux enumeration with read access only"
 ---
 If attackers exploit a vulnerability that gives them the ability to read arbitrary files from a remote system, they must count on default locations of configuration files to enumerate the system. They can't execute commands or list the files inside the directories and their permissions. 
 
-An example of such attack is XML External Entity (XXE) vulnerability, which could lead to disclosure of local files. The example below shows XXE exploit to read /etc/passwd file.  
+An example of such attack is XML External Entity (XXE) vulnerability, which could lead to disclosure of local files. The example below shows XXE exploit to read `/etc/passwd` file.  
 ![xxe_vulnerability](https://idafchev.github.io/blog/assets/images/linux_proc_enum/xxe01.png){: .align-center}  
 
-But attackers can enumerate much more than just files, when they have file read access. By utilizing the /proc filesystem it's possible to list running processes, mounted filesystems, network connections, listening ports, ARP cache and other things without the ability to execute commands.
+But attackers can enumerate much more than just files, when they have file read access. By utilizing the `/proc` filesystem it's possible to list running processes, mounted filesystems, network connections, listening ports, ARP cache and other things without the ability to execute commands.
 
 Below is an example of XXE exploit to list running processes without the need of command execution.  
 ![xxe_vulnerability](https://idafchev.github.io/blog/assets/images/linux_proc_enum/xxe02.png){: .align-center}  
@@ -26,9 +26,12 @@ Defenders should be aware that even with such restricted access it's possible to
 
 # <a name="proc"></a> The proc filesystem  
 ---
-The man pages explain the proc filesystem well enough: "*The proc filesystem is a pseudo-filesystem which provides an interface to kernel data structures. It is commonly mounted at /proc. [...] Most of the files in the proc filesystem are read-only, but some files are writable, allowing kernel variables to be changed.*". 
+The man pages explain the proc filesystem well enough:  
+```
+The proc filesystem is a pseudo-filesystem which provides an interface to kernel data structures. It is commonly mounted at /proc. [...] Most of the files in the proc filesystem are read-only, but some files are writable, allowing kernel variables to be changed.
+```
 
-So the pseudo-files inside /proc represent data stored in and used by the kernel in real time. Some programs make use of the data available in /proc, make it more user-friendly and show the information to the user. One such program, which everyone knows, is top. You can easily verify this with strace:
+So the pseudo-files inside `/proc` represent data stored in and used by the kernel in real time. Some programs make use of the data available in `/proc`, make it more user-friendly and show the information to the user. One such program, which everyone knows, is top. You can easily verify this with strace:
 ```
 root@kali:~# strace top
 execve("/usr/bin/top", ["top"], 0x7ffd2d20a6e0 /* 44 vars */) = 0
@@ -73,7 +76,7 @@ wlan0   00000000        0100A8C0        0003    0       0       600     00000000
 wlan0   0000A8C0        00000000        0001    0       0       600     00FFFFFF        0       0       0                                             
 ```
               
-`/proc/net/tcp` - contains the TCP socket table. Can be used to enumerate network connections and listening ports. The uid field holds the effective UID of the creator of the socket. IP addresses and ports are shown in HEX format. If "rem_address" is null, "local_address" represents listening socket. In this case the machine listens on 0100007F:0FA0 (equal to 127.0.0.1:4000). Addresses are in little endian.
+`/proc/net/tcp` - contains the TCP socket table. Can be used to enumerate network connections and listening ports. The uid field holds the effective UID of the creator of the socket. IP addresses and ports are shown in HEX format. If "rem_address" is null, "local_address" represents listening socket. In this case the machine listens on `0100007F:0FA0` (equal to `127.0.0.1:4000`). Addresses are in little endian.
 ```
 root@kali:~# cat /proc/net/tcp
   sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
@@ -81,7 +84,7 @@ root@kali:~# cat /proc/net/tcp
    1: 6400A8C0:DAAE 40706597:01BB 01 00000000:00000000 02:0000030C 00000000     0        0 84209 2 ffff8adcea1d8800 26 4 12 10 -1 
 ```
 
-`/proc/net/tcp6` - same as /proc/net/tcp, but for IPv6.
+`/proc/net/tcp6` - same as `/proc/net/tcp`, but for IPv6.
 
 `/proc/net/udp` - contains the UDP socket table.
 
@@ -105,7 +108,7 @@ root@kali:~# cat /proc/2837/cmdline
 python-mSimpleHTTPServer8080
 ```
 
-It's possible to write a script to enumerate the processes on the system by reading */proc/[pid]/cmdline* for a range of PIDs (for example from 1 to 30000 or more). Here's an example of such script, which enumerates processes through tftp:
+It's possible to write a script to enumerate the processes on the system by reading `/proc/[pid]/cmdline` for a range of PIDs (for example from `1` to `30000` or more). Here's an example of such script, which enumerates processes through tftp:
 ```sh
 #!/bin/bash
 
@@ -185,7 +188,7 @@ unconfined
 
 `/proc/[pid]/environ` - contains the initial environment variables which were set when the currently executing program was started.
 
-In all previous examples, "self" can be used instead of [pid], to use the current process PID.
+In all previous examples, `"self"` can be used instead of `[pid]`, to use the current process PID.
 ```
 root@kali:~# cat /proc/self/comm
 cat
@@ -316,7 +319,7 @@ root@kali:~# cat /proc/loadavg
 `/proc/cpuinfo` - contains information about the CPU.
 
 `/proc/sys` - a directory which holds system configuration variables. For example if
-`/proc/sys/net/ipv4/ip_forward` is set to 1, that means the system can forward ipv4 packets (act as a router). The variables are too many to be listed in this post. You could explore on your own.
+`/proc/sys/net/ipv4/ip_forward` is set to `1`, that means the system can forward ipv4 packets (act as a router). The variables are too many to be listed in this post. You could explore on your own.
 
 # <a name="config_files"></a> Default paths of configuration files  
 ---
