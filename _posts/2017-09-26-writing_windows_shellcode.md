@@ -238,7 +238,7 @@ call eax ; WinExec
 ---
 Now that you're familiar with the basic principles of a Windows shellcode it's time to write it. It's not much different than the code snippets I already showed, just have to glue them together, but with minor differences to avoid null bytes. I used [flat assembler](https://flatassembler.net/) to test my code.
 
-The instruction "mov ebx, fs:0x30" contains three null bytes. A way to avoid this is to write it as:
+The instruction `mov ebx, fs:0x30` contains three null bytes. A way to avoid this is to write it as:
 ```nasm
 xor esi, esi	; esi = 0
 mov ebx, [fs:30h + esi]
