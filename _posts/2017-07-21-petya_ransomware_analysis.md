@@ -27,7 +27,8 @@ I've taken the necessary precautions:
 
 Ok, let's begin!
 
-# Triage analysis
+# Triage analysis  
+---
 ### Checking strings
 First I used [bintext](https://www.mcafee.com/us/downloads/free-tools/bintext.aspx) to list the strings in the file. Below is some portion of the interesting ones:
 
@@ -127,15 +128,16 @@ Well, from the imports and the strings output we can conclude that it can open, 
 
 This preliminary step is to make a hypothesis of what the malicous file probably does, but we can't be sure that it uses those functions and tools until we analyse the disassembly.
 
-# Static and Dynamic Analysis
+# Static and Dynamic Analysis  
+---
 I won't go through every function of the binary, this would take way too much time and this post would've been longer than it already is.
 
 When I opened the ransomware in IDA, at the entry point `0x10007D39` was the function `DllEntryPoint`, so although the extension of the file is .exe, I guess it is actually a DLL.
 
 Which means that the only thing that gets called from that DLL is the only export - `perfc.1`. From there I'll start my analysis.
 
-# Elevate Privileges
-
+# Elevate Privileges  
+---
 `prfc` is a loong function, which calls lots of other funcions. The first one I'll call `ElevatePrivileges` which calls another function (I'll call it `Fx` for now ) 3 times with 3 different arguments.
 
 ```python
@@ -170,8 +172,8 @@ After every attempt to set the privileges a bitmask is set, which is stored in e
 `privileges` = 111 (7 decimal) means all privileges were sucessfuly set  
 `privileges` = 101 (5 decimal) means only `SeDebugPrivileges` failed
 
-# Process Enumeration
-
+# Process Enumeration  
+---
 Continuing with `ElevatePricileges`...  
 ![petya_002](https://idafchev.github.io/blog/assets/images/petya/petya_002.png){: .align-center}  
 
@@ -191,7 +193,8 @@ In my case `Src` is 0, so it tries to get it's own filename. Therefore for me `p
 
 If `ElevatePrivileges` succeeds it calls another function which reads a file and loads it into memory, and if it fails - the function returns. In this case it loads it's own executable in the memory of the process.
 
-# prfc
+# prfc  
+---
 Continuing with `prfc`(On the screenshot below `F1` is actually `ElevatePrivileges`, I'm just too lazy to make another screenshot)   
 ![petya_004](https://idafchev.github.io/blog/assets/images/petya/petya_004.png){: .align-center}  
 
@@ -205,7 +208,8 @@ The other subroutines in this screenshot aren't very interesting. Some functions
 
 From now on I won't explain in detail the process of how I analysed the functions, so in the screenshots that follow the functions will already be renamed. I'm only going to explain how they work and not how I came to the conclusion of how they work.
 
-# Create file in WinDir
+# Create file in WinDir  
+---
 ![petya_006](https://idafchev.github.io/blog/assets/images/petya/petya_006.png){: .align-center}  
 
 Next, If the ransomware has admin privileges (`SeDebugPrivilege` was successful), it creates a file with the same name at `C:\Windows` directory  (in my case that files is `"C:\Windows\027cc450ef5f8c5f653329641ec1fed9.exe"`)
@@ -217,6 +221,7 @@ Also the file is actually empty, nothing gets ever written to it (the handle is 
 After that it destroys the MBR.  
 
 # Destroy MBR  
+---
 ![petya_008](https://idafchev.github.io/blog/assets/images/petya/petya_008.png){: .align-center}  
 
 It opens the C volume with `GENERIC_WRITE (0x40000000)`.
@@ -279,12 +284,14 @@ If any of the `WriteToFile` functions fail, then after `OverwriteMBR` completes 
 
 The ransomware wipes the MBR and some sectors after it. No information is saved/encrypted for restoring this data.
 
-# prfc 
+# prfc  
+---
 We are back to the export function `prfc`. After the MBR wiping the malware sets a scheduled task for system shutdown.
 
 ![petya_014](https://idafchev.github.io/blog/assets/images/petya/petya_014.png){: .align-center}  
 
-# Create scheduled task to shutdown the system
+# Create scheduled task to shutdown the system 
+---
 It takes the current time and sets a scheduled task to run after 3 minutes by executing one of the following commands (depending on the Windows version):
 
 ```
@@ -295,7 +302,8 @@ C:/Windows/System32/cmd.exe /c at 16:03 C:\Windows\System32\shutdown.exe /r /f
 
 ![petya_016](https://idafchev.github.io/blog/assets/images/petya/petya_016.png){: .align-center}  
 
-# Network enumeration
+# Network enumeration  
+---
 Then `prfc` starts a new thread which executes network enumeration functions.
 
 ![petya_015](https://idafchev.github.io/blog/assets/images/petya/petya_015.png){: .align-center}  
@@ -308,7 +316,8 @@ First, it gets the name of the machine (in this case `"IE11WIN7"`) using the fun
 
 Next, a new thread is started, which executes the `EnumerateSMB` function.
 
-# EnumerateSMB
+# EnumerateSMB  
+---
 This function uses `GetAdaptersInfo` to get the IP address and subnetmask of all network interfaces.  
 ![petya_018](https://idafchev.github.io/blog/assets/images/petya/petya_018.png){: .align-center}  
 
@@ -363,17 +372,20 @@ The `ScanSMB` iterates through every IP address in the network (from the network
 
 That's the end of `EnumerateSMB`. Let's return to the other network enumerations..
 
-# GetTcpConnections
+# GetTcpConnections  
+---
 This function gets the TCP connections of the local machine. It loads `iphlpapi.dll` library and uses the `GetExtendedTcpTable` function. 
 
 The information that's available is similar to the one you get with the `netstat` command - local IP, local Port, remote IP, remote Port and status.
 
 The ransomware only saves the remote addresses of the TCP connections.
 
-# GetLocalNetworkIPs
+# GetLocalNetworkIPs  
+---
 This function enumerates the IP addresses from the ARP cache with the `GetIpNetTable` call.
 
-# EnumerateMachines
+# EnumerateMachines  
+---
 Enumerates the machine in the domain.  
 ![petya_037](https://idafchev.github.io/blog/assets/images/petya/petya_037.png){: .align-center}  
 
@@ -411,7 +423,8 @@ It checks it it's a Windows NT platform and if the major version is above 4, sav
 
 After all of this, the `NetworkEnumeration` thread waits for 3 minutes and then scans again.
 
-# Run resource 1 or 2
+# Run resource 1 or 2  
+---
 If the malware has admin privileges (`SeDebugPrivilege`), then it runs the first or second resource.  
 ![petya_024](https://idafchev.github.io/blog/assets/images/petya/petya_024.png){: .align-center}  
 
@@ -472,11 +485,13 @@ C:\Users\\<username\>\AppData\Local\Temp\xxxx.tmp \\.\pipe\{GUID}
 
 I guess the resource is the named pipe client, but I won't be analysing it now. At the end of the function the thread is closed and the temporary file gets deleted.
 
-# Copy Resource 3
+# Copy Resource 3  
+---
 After resource 1 or 2, the third resource is loaded, decompressed and written to `"C:\Windows"` directory with filename `"dllhost.dat"`.  
 ![petya_033](https://idafchev.github.io/blog/assets/images/petya/petya_033.png){: .align-center}  
 
-# admin$ share
+# admin$ share  
+---
 At this point the malware tries to spread via the admin share.
 
 ![petya_034](https://idafchev.github.io/blog/assets/images/petya/petya_034.png){: .align-center}  
@@ -496,7 +511,8 @@ And after that it tries to write itself to the admin shares of the machines with
 C:\Windows\System32\wbem\wmic.exe /node:\<node\> /user:\<username\> /password:\<password\> process call create "C:\Windows\System32\rundll32.exe \"C:\Windows\\<filename\>\""
 ```
 
-# Exploit SMB
+# Exploit SMB  
+---
 After it tries to spread via the admin share, it starts a thread which executes lots of other functions and one of them is this monster:  
 ![petya_044](https://idafchev.github.io/blog/assets/images/petya/petya_044.png){: .align-center}  
 
@@ -517,7 +533,8 @@ I continued debugging until I reached a socket send. The resource, after its dec
 So I called the function in prfc `Exploit_EternalBlue`:  
 ![petya_043](https://idafchev.github.io/blog/assets/images/petya/petya_043.png){: .align-center}  
 
-# Encrypt drives
+# Encrypt drives  
+---
 Now the ransomware finally starts to encrypt.  
 ![petya_046](https://idafchev.github.io/blog/assets/images/petya/petya_046.png){: .align-center}  
 
@@ -533,26 +550,30 @@ Next, it generates `128bit` AES key:
 And then, the function `EncryptFiles` starts encrypting the files on the drive with the AES key. It encrypts only those files that match certain extensions.  
 ![petya_052](https://idafchev.github.io/blog/assets/images/petya/petya_052.png){: .align-center}  
 
-# RansomNote
+# RansomNote  
+---
 The malware imports the public key and then encrypts the AES key with it.  
 ![petya_054](https://idafchev.github.io/blog/assets/images/petya/petya_054.png){: .align-center}  
 
 After that the ransom note is created. It's a text file called `"README.TXT"` and created at the root of the drive. It contains `"Installation ID"` which  is the encrypted AES key, which the victims should send to the cyber criminals to decrypt, after they pay the ransom.  
 ![petya_055](https://idafchev.github.io/blog/assets/images/petya/petya_055.png){: .align-center}  
 
-# Clear event logs
+# Clear event logs  
+---
 Back at `prfc`... After the `EncryptDrives` function the malware clears the event logs and the USN change journal ("which provides a persistent log of all changes made to files on the volume") with the command:  
 ```
 wevtutil cl Setup & wevtutil cl System & wevtutil cl Security & wevtutil cl Application & fsutil usn delete journal /D C:
 ```  
 ![petya_056](https://idafchev.github.io/blog/assets/images/petya/petya_056.png){: .align-center}  
 
-# TheEnd
+# TheEnd  
+---
 Finally the ransomware shuts down the machine.  
 ![petya_057](https://idafchev.github.io/blog/assets/images/petya/petya_057.png){: .align-center}  
 
 
-# Petya/NotPetya functionallity summarized
+# Petya/NotPetya functionallity summarized  
+---
 ```
 Try to elevate privileges
 If admin privileges
