@@ -407,7 +407,7 @@ typedef struct _SERVER_INFO_101 {
 
 So the function is called with:  
 `level = 101` 
-`server type* =  0x80000000 (SV_TYPE_DOMAIN_ENUM)` Which means it will return information about the domain.
+`server type =  0x80000000 (SV_TYPE_DOMAIN_ENUM)` Which means it will return information about the domain.
 
 In my case, I'm not on a domain, so the function returns the following values:  
 `sv101_platform_id = 500 (PLATFORM_ID_NT)` -> Windows NT platform  
@@ -416,7 +416,7 @@ In my case, I'm not on a domain, so the function returns the following values:
 
 Then it checks if the `server type` is a domain (`0x80000000`), if it is, calls itself but with parameters (in my case):  
 `domain  = WORKGROUP`  (the name of the domain)  
-`server type*  = (SV_TYPE_WORKSTATION | SV_TYPE_SERVER)` which means this time it will return information about the machines (workstations and servers) on the domain.  
+`server type  = (SV_TYPE_WORKSTATION | SV_TYPE_SERVER)` which means this time it will return information about the machines (workstations and servers) on the domain.  
 ![petya_039](https://idafchev.github.io/blog/assets/images/petya/petya_039.png){: .align-center}  
 
 It checks it it's a Windows NT platform and if the major version is above 4, saves the machine name.
