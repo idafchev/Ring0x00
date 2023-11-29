@@ -79,11 +79,11 @@ Below are some screenshots from the PoC and it's traffic.
 The id parameter is used to indicate the last request, so the server knows when to start decoding the message.
 ![stego_http01](https://idafchev.github.io/blog/assets/images/stego_http/stego_http01.png)
 
-Wireshark capture.
+Wireshark capture.  
 ![stego_http02](https://idafchev.github.io/blog/assets/images/stego_http/stego_http02.png)
 
-Request with a hidden message.
+Request with a hidden message.  
 ![stego_http03](https://idafchev.github.io/blog/assets/images/stego_http/stego_http03.png)
 
-Another request, but here you can see the spaces at the end of the headers, before '\r\n'
+Another request, but here you can see the spaces at the end of the headers, before '\r\n'  
 ![stego_http04](https://idafchev.github.io/blog/assets/images/stego_http/stego_http04.png)
