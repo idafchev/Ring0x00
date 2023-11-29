@@ -76,7 +76,7 @@ This technique could be made ineffective with http traffic normalization and ano
 
 Below are some screenshots from the PoC and it's traffic.
 
-The id parameter is used to indicate the last request, so the server knows when to start decoding the message.
+The id parameter is used to indicate the last request, so the server knows when to start decoding the message.  
 ![stego_http01](https://idafchev.github.io/blog/assets/images/stego_http/stego_http01.png)
 
 Wireshark capture.  
