@@ -20,7 +20,7 @@ plaintext = 'plaintext'
 ciphertext = kkkkkkkkk XOR plaintext
 ```
 
-![xor01](https://idafchev.github.io/blog/assets/images/crypto_xor/xor01{: .align-center}  
+![xor01](https://idafchev.github.io/blog/assets/images/crypto_xor/xor01.png){: .align-center}  
 
 And to decrypt the message, XOR every byte of the ciphertext with the key:  
 ```
@@ -28,7 +28,7 @@ key = 'k'
 plaintext = kkkkkkkkk XOR ciphertext
 ```
 
-![xor02](https://idafchev.github.io/blog/assets/images/crypto_xor/xor02{: .align-center}  
+![xor02](https://idafchev.github.io/blog/assets/images/crypto_xor/xor02.png){: .align-center}  
 
 Below is a function that does XOR of two strings of equal length:  
 
@@ -242,7 +242,7 @@ plaintext = 'plaintext'
 ciphertext = secretsec XOR plaintext
 ```
 
-![xor03](https://idafchev.github.io/blog/assets/images/crypto_xor/xor03{: .align-center}  
+![xor03](https://idafchev.github.io/blog/assets/images/crypto_xor/xor03.png){: .align-center}  
 
 Here is the implementation:  
 
@@ -302,7 +302,7 @@ To crack the key there are several steps:
 
 Lets illustrate those steps:
 
-![xor04](https://idafchev.github.io/blog/assets/images/crypto_xor/xor04{: .align-center}  
+![xor04](https://idafchev.github.io/blog/assets/images/crypto_xor/xor04.png){: .align-center}  
 
 By now I hope you see how this method works :)
 
@@ -348,7 +348,7 @@ The cracking step turns out to be a little harder. The transposed blocks are eve
 and so their corresponding plaintext isn't composed of english words. This makes it harder to distinguish which one-byte key produces
 the correct plaintext. That's why it's necessary to have a long message (longer message -> longer blocks) to be able to use statistical methods on the transposed blocks.
 
-![xor05](https://idafchev.github.io/blog/assets/images/crypto_xor/xor05{: .align-center}  
+![xor05](https://idafchev.github.io/blog/assets/images/crypto_xor/xor05.png){: .align-center}  
 
 1) I take every possible one-byte key for a single block and test if it produces ascii printable output. If it does, I store it in a list (that way I filter out may invalid keys). There is one such list for every block, which contains the keys that produce printable output.
 
