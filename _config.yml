@@ -311,4 +311,3 @@ defaults:
       
 search: true
 timezone: "Europe/Sofia"
-include: ["_pages"]
