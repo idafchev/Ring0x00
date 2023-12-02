@@ -1,8 +1,15 @@
 ---
 date:   2017-06-22 15:12:01 -0600
-tags: [posts]
 excerpt: "Crackme challenges writeup from the Modern Binary Exploitation course."
 title:  "Basic Reverse Engineering (writeup) - Part 0x00"
+toc: true
+tags:
+  - posts
+  - reversing
+  - binary
+  - exploit
+  - writeup
+  - linux
 ---
 
 # Introduction
@@ -11,7 +18,7 @@ I've started a course on [Modern Binary Exploitation](http://security.cs.rpi.edu
 
 This post will focus on the crackme challenges from the "Tools and Basic Reverse Engineering" class.
 
-### If you plan to take the course I highly encourage you not to read any further and try to solve the challenges yourself. You'll learn much more that way.
+**If you plan to take the course I highly encourage you not to read any further and try to solve the challenges yourself. You'll learn much more that way.**
 
 Now lets start reversing!
 
