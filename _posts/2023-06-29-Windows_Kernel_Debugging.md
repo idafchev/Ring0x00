@@ -1,25 +1,23 @@
 ---
 date:   2023-06-29 00:00:00 +0300
-tags: [posts]
 excerpt: "Configuring environment for kernel debugging"
 title:  "Environment Setup for Windows Kernel Debugging with Windbg"
+toc: true
+tags:
+  - posts
+  - debugging
+  - driver
+  - kernel
+  - windbg
 ---
-# Table of Contents  
----
-[1. Introduction](#1_introduction)  
-[2. Configuring your VM (debugee)](#2_vm)  
-[3. Configuring your dev/debugger environment](#3_dev_environment)  
-[4. Windbg command cheatsheet](#4_windbg)  
-[5. References](#5_references)  
-
-# <a name="1_introduction"></a> 1. Introduction  
+# 1. Introduction  
 ---
 In this blog post, I will describe how to set up an environment for kernel debugging in Windows and provide a WinDbg command cheatsheet.  
 I will reference some commands in subsequent posts to avoid repeating explanations.  
 
 When it comes to kernel debugging, it is crucial to understand that when a breakpoint is reached during the debugging process of an operating system, the entire OS freezes. Consequently, it becomes impossible to utilize a debugger within the same OS environment. Instead, a separate system is required, which connects remotely to the target OS undergoing debugging. This setup enables communication between the debugger and the target OS, ensuring that when execution is paused, your current OS remains unaffected.  
 
-# <a name="2_vm"></a> 2. Configuring your VM (debugee)  
+# 2. Configuring your VM (debugee)  
 ---
 I am using VMware Workstation but other hypervisors should have similar options.  
 
@@ -87,7 +85,7 @@ And if you want to disable driver integrity checks completely:
 2.6 Power off the VM and create another snapshot  
 
 
-# <a name="3_dev_environment"></a> 3. Configuring your dev/debugger environment  
+# 3. Configuring your dev/debugger environment  
 ---
 3.1. Install latest Visual Studio with the Desktop development with C++ workload  
 3.2. Install Windows 11 SDK  
@@ -124,7 +122,7 @@ Set the Serial Port as client.
 Run Windbg with default COM settings, but specifying the COM port number as the Serial Port number.  
 ![debugger_vm2](https://idafchev.github.io/blog/assets/images/kernel_debugging/kernel_debugging_10.png){: .align-center}  
 
-# <a name="4_windbg"></a> 4. Windbg initial steps  
+# 4. Windbg initial steps  
 ---
 After connecting to the debugged kernel, the first commands which are useful to use in windbg are:
 
@@ -133,7 +131,7 @@ After connecting to the debugged kernel, the first commands which are useful to 
 .symfix    // automatically sets the symbol path to point to the Microsoft symbol store
 .reload    // deletes all symbol information and reloads the symbols as needed
 ```
-# <a name="5_windbg"></a> 5. Windbg command cheatsheet  
+# 5. Windbg command cheatsheet  
 ---
 Windbg has a lot of commands. Here I will list only those which might be useful for these blog posts.  
 
@@ -276,7 +274,7 @@ nt!PsLoadedModuleList - Loaded modules in kernel (_LIST_ENTRY)
 nt!PspNotifyEnableMask - Flag which can disable kernel notify routines
 ```
 
-# <a name="5_references"></a> 5. References  
+# 5. References  
 ---
 1. [http://windbg.info/doc/1-common-cmds.html](http://windbg.info/doc/1-common-cmds.html)
 2. [http://windbg.info/download/doc/pdf/WinDbg_A_to_Z_color.pdf](http://windbg.info/download/doc/pdf/WinDbg_A_to_Z_color.pdf)
