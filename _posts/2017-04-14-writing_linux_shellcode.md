@@ -1,11 +1,18 @@
 ---
 date:   2017-04-14 15:12:01 -0600
-tags: [posts]
 excerpt: "Introduction to the arcane art of shellcode writing."
 title:  "Writing a port binding shellcode for Linux"
+toc: true
+tags:
+  - posts
+  - shellcode
+  - linux
+  - pentest
+  - exploit
+  - port binding
 ---
 
-## Introduction
+# Introduction
 
 A few weeks ago I wrote my first shellcode, so I'm definately not an expert in shellcode writing, but I want to write down and explain what I've learned.
 I think that the best way to see if you really understand something is to try and teach it to someone.
@@ -42,7 +49,7 @@ edi = arg5
 
 And one last thing - arrays and strings have to be null terminated.  
 
-### The execve system call:
+# The execve system call:
 ```c
 int execve(const char *filename, char *const argv[], char *const envp[]);
 ```
@@ -62,7 +69,7 @@ For this example the arguments have the following values:
 `argv[]` = `['/bin/nc', '-lp8080', '-e/bin/sh']`  
 `envp[]` = 0  
 
-### The setuid system call:
+# The setuid system call:
 ```c
 int setuid(uid_t uid);
 ```
@@ -73,12 +80,12 @@ int setuid(uid_t uid);
 The user id of root is zero:  
 `uid` = 0  
 
-### Pushing strings on the stack
+# Pushing strings on the stack
 
 The stack grows from high memory addresses to low memory addresses and Intel CPUs are little endian, so effectively the strings are stored onto the stack in reverse (the most significat byte is at a lower address and the least significat - at higher address). This means that the 
 bytes of a string must be pushed in reversed order.
 
-## Writing the shellcode
+# Writing the shellcode
 Shellcode writing consists of three steps:
 1. Write the program in assembly
 2. Disassemble it
@@ -249,7 +256,7 @@ _start:         ; entry point
   pop eax   ; load 0xb in eax
   int 0x80  ; call execve('/bin//nc', ['/bin//nc', '-lp8080', '-e/bin/sh'], 0)
 ```
-## Testing time
+# Testing time
 Save the file and compile it. I saved mine as `shellcode-c137.asm`
 ```bash
 root@kali:~# nasm -f elf  shellcode-c137.asm
@@ -306,7 +313,7 @@ And the resulting shellcode is:
 
 The length of the shellcode is 62 bytes.
 
-## The end of the journey
+# The end of the journey
 
 What's left is to package it in a C program. 
 
