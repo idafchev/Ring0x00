@@ -1,8 +1,15 @@
 ---
 date:   2019-10-28 16:00:00 +0200
-tags: [posts]
 excerpt: "A specific case of bypassing a firewall"
 title:  "Combining ARP poisoning and IP spoofing to bypass firewalls"
+toc: true
+tags:
+  - posts
+  - ARP
+  - spoffing
+  - firewall
+  - bypass
+  - pentest
 ---
 # Introduction  
 ---
