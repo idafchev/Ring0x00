@@ -5,10 +5,11 @@ title:  "Basic Reverse Engineering (writeup) - Part 0x02"
 toc: true
 tags:
   - posts
-  - http
-  - Steganography
-  - protocol
-  - c2
+  - reversing
+  - exploit
+  - binary
+  - linux
+  - writeup
 ---
 
 # Introduction
