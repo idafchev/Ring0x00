@@ -1,10 +1,18 @@
 ---
 date:   2017-07-21 09:12:01 -0600
-tags: [posts]
 excerpt: "Analysis of the Petya/NotPetya ransomware."
 title:  "Petya/NotPetya Ransomware Analysis"
+toc: true
+tags:
+  - posts
+  - Petya
+  - NotPetya
+  - ransomware
+  - analysis
+  - reversing
 ---
-
+# Introduction  
+---
 I got the sample from [theZoo](https://github.com/ytisf/theZoo). I don't know if this is an actual sample caught "in the wild", but for my surprise it wasn't packed or had any advanced anti-RE tricks. I guess ransomware writers just want a quick profit. 
 
 When I started the analysis (a few weeks ago), I didn't know much about how Petya works, so this whole analysis is my own. Probably I've got some things wrong, it's my first malware analysis and I'm doing it as a learning experience.
@@ -29,7 +37,7 @@ Ok, let's begin!
 
 # Triage analysis  
 ---
-### Checking strings
+## Checking strings
 First I used [bintext](https://www.mcafee.com/us/downloads/free-tools/bintext.aspx) to list the strings in the file. Below is some portion of the interesting ones:
 
 ```
@@ -97,7 +105,7 @@ process call create "C:\Windows\System32\rundll32.exe \"C:\Windows\%s\" #1
 
 So much useful output definitely means it's not packed!
 
-### Checking the PE headers
+## Checking the PE headers
 Next I used PE Explorer and CFF Explorer to check what libraries it imports and what functions it exports. This also hinted that the binary probably isn't packed (many imported DLLs).
 
 Imports:
