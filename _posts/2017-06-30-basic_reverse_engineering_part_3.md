@@ -22,7 +22,7 @@ This (as you can see) is the third post and it will focus on the `cmubomb` chall
 
 For some of the challenges you don't need to look at every assembly instruction but just looking at the function calls and byte/string comparisons you can immediately understand what input is expected without reversing the whole thing.
 
-## cmubomb
+# cmubomb
 
 Starting the executable we're presented with the following text:
 
@@ -38,7 +38,7 @@ We enter 'Public speaking is very easy.' aaaaand...
 
 Success!!
 
-## Phase 2
+# Phase 2
 
 phase2:  
 ![cmubomb_phase2_1](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase2_1.png){: .align-center}  
@@ -61,7 +61,7 @@ I chose to try `1 2 6 24 120 720`
 
 ![cmubomb_phase2_4](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase2_4.png){: .align-center}  
 
-## Phase 3
+# Phase 3
 
 At phase 3 the expected input is a number, a character and again a number.  
 Next we enter a switch statement with 8 cases (0-7) and the first number of our input selects the case.  
@@ -73,7 +73,7 @@ For case 1 that's character `'b'` and `number2 = 214`
 
 ![cmubomb_phase3_3](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase3_3.png){: .align-center}  
 
-## Phase 4
+# Phase 4
 
 phase4:  
 ![cmubomb_phase4_1](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase4_1.png){: .align-center}  
@@ -94,7 +94,7 @@ So which input would produce a result of `55`?
 
 ![cmubomb_phase4_3](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase4_3.png){: .align-center}  
 
-## Phase 5
+# Phase 5
 
 phase5:
 ![cmubomb_phase5_1](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase5_1.png){: .align-center}  
@@ -148,7 +148,7 @@ $ ./phase5.py
 
 ![cmubomb_phase5_3](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase5_3.png){: .align-center}  
 
-## Phase 6
+# Phase 6
 
 Phase 6 is harder then the previous phases. Let's see the disassembly:  
 ![cmubomb_phase6_1](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_phase6_1.png){: .align-center}  
@@ -309,7 +309,7 @@ But wait! There's more! If you look at list of function in IDA you'see that ther
 
 Time to figure out how to access it.
 
-## THE SEARCH FOR THE SECRET PHASE
+# THE SEARCH FOR THE SECRET PHASE
 
 First, let's check the cross references and see where that fucntion is called.
 
@@ -439,7 +439,7 @@ That means the buffer `input_strings` contains `"9 austinpowers"`, but phase 4 r
 sscanf("9 austinpowers", "%d %s", &var_54, &var_50 )
 ```
 
-## SECRET PHASE
+# SECRET PHASE
 
 ![cmubomb_secret_phase_14](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/cmubomb_secret_phase_14.png){: .align-center}  
 
