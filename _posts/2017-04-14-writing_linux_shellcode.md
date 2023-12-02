@@ -49,7 +49,7 @@ edi = arg5
 
 And one last thing - arrays and strings have to be null terminated.  
 
-# The execve system call:
+# The execve system call
 ```c
 int execve(const char *filename, char *const argv[], char *const envp[]);
 ```
@@ -69,7 +69,7 @@ For this example the arguments have the following values:
 `argv[]` = `['/bin/nc', '-lp8080', '-e/bin/sh']`  
 `envp[]` = 0  
 
-# The setuid system call:
+# The setuid system call
 ```c
 int setuid(uid_t uid);
 ```
