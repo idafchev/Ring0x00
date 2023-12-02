@@ -5,7 +5,7 @@ title:  "Exploring the Windows kernel using vulnerable driver - Part 2"
 toc: true
 tags:
   - posts
-  - wrmsr
+  - CVE-2019-16098
   - driver
   - vulnerability
   - exploit
