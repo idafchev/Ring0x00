@@ -1,17 +1,17 @@
 ---
 date:   2023-07-01 00:00:00 +0300
-tags: [posts]
 excerpt: "Exploiting CVE-2019-16098 to steal a token"
 title:  "Exploring the Windows kernel using vulnerable driver - Part 2"
+toc: true
+tags:
+  - posts
+  - wrmsr
+  - driver
+  - vulnerability
+  - exploit
+  - kernel
 ---
-# Table of Contents  
----
-[1. Introduction](#1_introduction)  
-[2. Token stealing - theory](#2_token_stealing_theory)  
-[3. Token stealing in practice](#3_token_stealing_example)  
-[4. References](#4_references)  
-
-# <a name="1_introduction"></a> 1. Introduction  
+# 1. Introduction  
 ---
 Welcome back to my blog series on exploring the Windows kernel with a vulnerable driver! The previous part discussed how Windows drivers function and explained how the MSI Afterburner driver vulnerability works. Now, this second part, will explore how this vulnerability can be exploited for activities like privilege escalation and other harmful actions.  
 
@@ -19,7 +19,7 @@ Again, I want to emphasize that the purpose of this blog post is purely educatio
 
 In addition, some of the code I directly took or adapted from the [PPLKiller](https://github.com/RedCursorSecurityConsulting/PPLKiller), [PPLControl](https://github.com/itm4n/PPLcontrol) and [CVE-2019-16098](https://github.com/Barakat/CVE-2019-16098) GitHub repositories, therefore their authors are to be credited.  
 
-# <a name="2_token_stealing_theory"></a> 2. Token stealing - theory  
+# 2. Token stealing - theory  
 ---
 Token stealing is a frequently employed technique when attempting to escalate privileges through a vulnerability. It is a relatively straightforward method, and there are ample examples available on the Internet, making it an ideal starting point to explain various Windows kernel concepts and structures before delving into more intricate topics.  
 
@@ -91,7 +91,7 @@ The security token represents the security context and privileges associated wit
 
 ![Token Steal](https://idafchev.github.io/blog/assets/images/driver_vulnerability/token_steal.png){: .align-center}  
 
-# <a name="3_token_stealing_example"></a> 3. Token stealing in practice  
+# 3. Token stealing in practice  
 ---
 The `EPROCESS` structure is an internal component of the Windows operating system that is not intended for direct access. As a result, its format and field offsets may vary across different Windows versions. This implies that if an exploit relies on hardcoded offsets, it will only function correctly on specific Windows versions where those offsets align. On other Windows versions, it will probably crash the OS and lead to BSOD.  
 
@@ -400,7 +400,7 @@ As an exercise you can try to extend the current code and add functionality:
 - Change the token structure itself to enable all possible privileges  
 - Delete callbacks registered by minifilter drivers  
 
-# <a name="4_references"></a> 4. References  
+# 4. References  
 ---
 1. [https://github.com/itm4n/PPLcontrol](https://github.com/itm4n/PPLcontrol)  
 2. [https://github.com/RedCursorSecurityConsulting/PPLKiller](https://github.com/RedCursorSecurityConsulting/PPLKiller)  
