@@ -1,20 +1,15 @@
 ---
 date:   2017-09-26 09:12:01 -0600
-tags: [posts]
 excerpt: "A second look at the arcane art of shellcode writing"
 title:  "Basics of Windows shellcode writing"
+toc: true
+tags:
+  - posts
+  - windows
+  - shellcode
+  - exploit
 ---
-# Table of contents  
----
-[Introduction](#introduction)  
-[Find the DLL base address](#find_dll)  
-[Find the function address](#find_function)  
-[Call the function](#call_function)  
-[Write the shellcode](#write_shellcode)  
-[Test the shellcode](#test_shellcode)  
-[Resources](#resources)  
-
-# <a name="introduction"></a> Introduction  
+# Introduction  
 ---
 This tutorial is for `x86 32bit` shellcode. Windows shellcode is a lot harder to write than the shellcode for Linux and you'll see why. First we need a basic understanding of the Windows architecture, which is shown below. Take a good look at it. Everything above the dividing line is in User mode and everything below is in Kernel mode.  
 
@@ -46,7 +41,7 @@ This means that the shellcode must find where in memory the DLL we're looking fo
 
 The shellcode I'm going to write is going to be simple and its only function will be to execute `calc.exe`. To accomplish this I'll make use of the [WinExec](https://msdn.microsoft.com/en-us/library/windows/desktop/ms687393.aspx) function, which has only two arguments and is exported by `kernel32.dll`.
 
-# <a name="find_dll"></a> Find the DLL base address  
+# Find the DLL base address  
 ---
 [Thread Environment Block (TEB)](https://en.wikipedia.org/wiki/Win32_Thread_Information_Block) is a structure which is unique for every thread, resides in memory and holds information about the thread. The address of `TEB` is held in the `FS` segment register.
 
@@ -90,7 +85,7 @@ When learning about Windows shellcode (and assembly in general), [WinREPL](https
 
 ![locate_dll3](https://idafchev.github.io/blog/assets/images/windows_shellcode/locate_dll3.gif){: .align-center}  
 
-# <a name="find_function"></a> Find the function address  
+# Find the function address  
 ---
 Now that we have the base address of `kernel32.dll`, it's time to find the address of the `WinExec` function. To do this we need to traverse several headers of the DLL. You should get familiar with the format of a PE executable file. Play around with [PEView](http://wjradburn.com/software/) and check out some [great illustrations of file formats](https://github.com/corkami/pics/tree/master/binary).
 
@@ -214,7 +209,7 @@ xor eax, eax 			; counter = 0
 	ret
 ```
 
-# <a name="call_function"></a> Call the function  
+# Call the function  
 ---
 What's left is to call `WinExec` with the appropriate arguments: 
 ```nasm
@@ -234,7 +229,7 @@ push esi ; "C:\Windows\System32\calc.exe"
 call eax ; WinExec
 ```
 
-# <a name="write_shellcode"></a> Write the shellcode  
+# Write the shellcode  
 ---
 Now that you're familiar with the basic principles of a Windows shellcode it's time to write it. It's not much different than the code snippets I already showed, just have to glue them together, but with minor differences to avoid null bytes. I used [flat assembler](https://flatassembler.net/) to test my code.
 
@@ -480,7 +475,7 @@ Length in bytes:
 
 It'a a lot bigger than the Linux shellcode I wrote.
 
-# <a name="test_shellcode"></a> Test the shellcode  
+# Test the shellcode  
 ---
 The last step is to test if it's working. You can use a simple C program to do this. 
 
@@ -593,7 +588,7 @@ push 456e6957h
 mov [ebp-4], esp ; edx -> "WinExec\x00"
 ```
 
-# <a name="resources"></a> Resources  
+# Resources  
 ---
 For the pictures of the `TEB`, `PEB`, etc structures I consulted several resources, because the official documentation at MSDN is either non existent, incomplete or just plain wrong. Mainly I used [ntinternals](https://undocumented.ntinternals.net/), but I got confused by some other resources I found before that. I'll list even the wrong resources, that way if you stumble on them, you won't get confused (like I did).
 
