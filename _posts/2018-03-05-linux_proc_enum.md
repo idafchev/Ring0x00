@@ -1,16 +1,16 @@
 ---
 date:   2018-03-05 09:12:01 -0600
-tags: [posts]
 excerpt: "When attackers have arbitrary file read access to a Linux machine, they can leverage the /proc filesystem for enumeration"
 title:  "Linux enumeration with read access only"
+toc: true
+tags:
+  - posts
+  - linux
+  - enumeration
+  - recon
+  - pentest
 ---
-# Table of contents  
----
-[Introduction](#introduction)  
-[The proc filesystem](#proc)  
-[Default paths of configuration files](#config_files)  
-
-# <a name="introduction"></a> Introduction  
+# Introduction  
 ---
 If attackers exploit a vulnerability that gives them the ability to read arbitrary files from a remote system, they must count on default locations of configuration files to enumerate the system. They can't execute commands or list the files inside the directories and their permissions. 
 
@@ -24,7 +24,7 @@ Below is an example of XXE exploit to list running processes without the need of
 
 Defenders should be aware that even with such restricted access it's possible to disclose valuable information about the machine, which attackers can use to their advantage and further compromise the machine.
 
-# <a name="proc"></a> The proc filesystem  
+# The proc filesystem  
 ---
 The man pages explain the proc filesystem well enough:  
 ```
@@ -321,7 +321,7 @@ root@kali:~# cat /proc/loadavg
 `/proc/sys` - a directory which holds system configuration variables. For example if
 `/proc/sys/net/ipv4/ip_forward` is set to `1`, that means the system can forward ipv4 packets (act as a router). The variables are too many to be listed in this post. You could explore on your own.
 
-# <a name="config_files"></a> Default paths of configuration files  
+# Default paths of configuration files  
 ---
 For completeness I'll list the default paths to some configuration files and other files valuable to an attacker.
 
