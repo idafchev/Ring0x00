@@ -1,12 +1,15 @@
 ---
 
 date:   2017-07-10 15:12:01 -0600
-tags: [posts]
 excerpt: "A PoC for hiding data in HTTP headers."
 title:  "HTTP Steganography PoC"
-author: "Iliya Dafchev"
+tags:
+  - posts
+  - http
+  - Steganography
+  - protocol
+  - c2
 ---
-
 I wrote a proof of concept for hiding and transfering data in the HTTP headers. I don't know if it's a unique idea (probably not), but I think it's an interesting one (although not very efficient) and I wanted to implement it.
 
 You can find the source code [here](https://github.com/idafchev/stego_http).
