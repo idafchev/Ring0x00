@@ -22,13 +22,13 @@ This (as you can see) is the second post and it will focus on the bombs challeng
 
 This time I'll make use of gdb(pwndbg) and IDA. Also for some of the challenges you don't need to look at every assembly instruction but just looking at the function calls and byte/string comparisons you can immediately understand what input is expected without reversing the whole thing.
 
-## bomb
+# bomb
 
 After starting the bomb executable, we're presented with four options - YELLOW, GREEN, BLUE and RED, corresponding to the wires that we need to cut to deactivate the bomb. When we choose an option we are asked about a password. Entering the right password cuts the wire and entering the wrong password blows the bomb. Our mission is to reverse the algorithms and find the passwords for each wire and deactivate the bomb.
 
 Let's start with Yellow.
 
-## Yellow
+# Yellow
 
 ![bomb_yellow_1](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/bomb_yellow_1.png){: .align-center}  
 
@@ -131,7 +131,7 @@ And to try the password:
 
 It worked! We cut the yellow wire.
 
-## Green
+# Green
 
 Disassembling green it's easy to notice where our input is stored and that there is a string comparison with a string at address `0x804a2c0`.
 
@@ -204,7 +204,7 @@ pwndbg> x/s 0x804a2c0
 
 ![bomb_green_1](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/bomb_green_1.png){: .align-center}  
 
-## Blue
+# Blue
 
 ```nasm
 pwndbg> disass blue_preflight 
@@ -621,7 +621,7 @@ Key: LLRR
 
 ![bomb_blue_5](https://idafchev.github.io/blog/assets/images/basic_reverse_engineering/bomb_blue_5.png){: .align-center}  
 
-## Red
+# Red
 
 When you run the RED option three hexadecimal numbers are generated:
 
