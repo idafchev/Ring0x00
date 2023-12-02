@@ -22,7 +22,7 @@ This post will focus on the crackme challenges from the "Tools and Basic Reverse
 
 Now lets start reversing!
 
-## crackme0x00a
+# crackme0x00a
 
 The focus of `crackme0x00a` and `crackme0x00b` is on strings and checking the strings for interesting information is one of the first things you'll have to do when analysing a binary.
 
@@ -50,7 +50,7 @@ Enter password: g00dJ0B!
 Congrats!
 ```
 
-## crackme0x00b
+# crackme0x00b
 
 Don't forget to search for strings in different encodings. Use the `-e` switch to specify the encoding.  
 `strings -e l` searches for 16bit little endian encoding  
@@ -67,7 +67,7 @@ Enter password: w0wgreat
 Congrats!
 ```
 
-## crackme0x01
+# crackme0x01
 
 That's the first binary where we'll have to dig into the assembly. These crackme challenges are quite easy and for solving them I only used `objdump` and occasionally `gdb (pwndbg)`.
 
@@ -137,7 +137,7 @@ Password OK :)
 
 Aaaand success!
 
-## crackme0x02
+# crackme0x02
 
 A thing to keep in mind is that local variables are referenced by negative offset with respect ot `ebp` (because the stack grows to lower addresses) like `[ebp-0x8]`, `[ebp-0x4]`, `[ebp-0xc]` or by a positive offset with respect to `esp` (because `esp` points to the top of the stack - lowest current address) like `[esp+0x4]`, `[esp+0x8]`. Basically `ebp` with negative offset and `esp` with positive offset points to memory address at the current stack frame.
 
@@ -215,7 +215,7 @@ Password: 338724
 Password OK :)
 ```
 
-## crackme0x03
+# crackme0x03
 
 This time we have two more functions - `test()` and `shift()`. The `main()` function is almost the same. This time `var2` and our input is passed to the function `test()` and if our input is correct calls `shift(string)` which decodes the passed string and prints it. The encoded string that is passed to `shift()` is just the message that tells if our password was correct or not.
 
@@ -363,7 +363,7 @@ Password: 338724
 Password OK!!! :)
 ```
 
-## crackme0x04
+# crackme0x04
 
 When the offset to a local variable is large (for example `[ebp-0x78]`) this usually means it's a buffer (or that the function has many local variables). Because x86 architecture is little endian the strings are stored in memory in reverse. That means the starting address of the string is at the lowest memory address of the buffer. 
 
@@ -503,7 +503,7 @@ Password: 5511111
 Password OK!
 ```
 
-## crackme0x05
+# crackme0x05
 
 Basically the same as `crackme0x04` but this time the sum of the individual digits must be decimal 16 and a bonus condition (checked by `parell()` function) that the whole input number must be even.
 
@@ -679,7 +679,7 @@ Password OK!
 ```
 
 
-## crackme0x06
+# crackme0x06
 
 This crackme adds additional condition to the previous one. Now the sum of the input digits must be 16, the input number must be even and an environment variable must exist such that it's name must begin with `'LOL'`.
 
