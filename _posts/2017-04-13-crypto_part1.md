@@ -1,8 +1,15 @@
 ---
 date:   2017-04-13 15:12:01 -0600
-tags: [posts]
 excerpt: "The first part of a series of posts about encryption."
 title:  "Crypto - Part 1. Breaking XOR Encryption."
+toc: true
+tags:
+  - posts
+  - cryptography
+  - breaking
+  - xor
+  - encryption
+  - cryptanalysis
 ---
 
 # Introduction
