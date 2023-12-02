@@ -1,8 +1,15 @@
 ---
 date:   2019-01-23 22:00:00 +0200
-tags: [posts]
 excerpt: "A research on why the new defender evasion modules fail to evade"
 title:  "Beating Windows Defender. Analysis of Metasploit's new evasion modules."
+toc: true
+tags:
+  - posts
+  - defender
+  - metasploit
+  - meterpreter
+  - bypass
+  - evasion
 ---
 # Introduction  
 ---
