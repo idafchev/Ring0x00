@@ -1,8 +1,15 @@
 ---
 date:   2019-03-24 00:00:00 +0200
-tags: [posts]
 excerpt: "Microsfot fixed their detection logic, so this doesn't work anymore."
 title:  "Office 365 AMSI Bypass (fixed)"
+toc: true
+tags:
+  - posts
+  - O365
+  - Office
+  - AMSI
+  - bypass
+  - research
 ---
 # Introduction  
 ---
