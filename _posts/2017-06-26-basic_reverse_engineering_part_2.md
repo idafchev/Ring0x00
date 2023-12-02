@@ -1,8 +1,15 @@
 ---
 date:   2017-06-26 15:12:01 -0600
-tags: [posts]
 excerpt: "Bomb challenge writeup from the Modern Binary Exploitation course."
 title:  "Basic Reverse Engineering (writeup) - Part 0x01"
+toc: true
+tags:
+  - posts
+  - reversing
+  - binary
+  - exploit
+  - writeup
+  - linux
 ---
 
 # Introduction
@@ -11,7 +18,7 @@ I've started a course on [Modern Binary Exploitation](http://security.cs.rpi.edu
 
 This (as you can see) is the second post and it will focus on the bombs challenges from the "Extended Reverse Engineering" class. It came out too long, so this post is going to be about only the bomb executable. The cmubomb and crackme0x04_win.exe will be in separate posts.
 
-### If you plan to take the course I highly encourage you not to read any further and try to solve the challenges yourself. You'll learn much more that way.
+**If you plan to take the course I highly encourage you not to read any further and try to solve the challenges yourself. You'll learn much more that way.**
 
 This time I'll make use of gdb(pwndbg) and IDA. Also for some of the challenges you don't need to look at every assembly instruction but just looking at the function calls and byte/string comparisons you can immediately understand what input is expected without reversing the whole thing.
 
