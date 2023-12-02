@@ -1,19 +1,17 @@
 ---
 date:   2023-06-30 00:00:00 +0300
-tags: [posts]
 excerpt: "Driver basics and CVE-2019-16098"
 title:  "Exploring the Windows kernel using vulnerable driver - Part 1"
+toc: true
+tags:
+  - posts
+  - CVE-2019-16098
+  - driver
+  - vulnerability
+  - exploit
+  - kernel
 ---
-# Table of Contents  
----
-[1. Introduction](#1_introduction)  
-[2. Windows driver basics](#2_drivers)  
-[3. Securing access to drivers](#3_driver_security)  
-[4. Analyzing RTCore64](#4_rtcore64)  
-[5. Interacting with RTCore64](#5_interacting)  
-[6. References](#6_references)  
-
-# <a name="1_introduction"></a> 1. Introduction  
+# 1. Introduction  
 ---
 I got really curious about how those tools that bypass security software with a driver actually work. So, I decided to dig into the source code of some popular ones like PPLKiller, PPLControl, and others that take advantage of the CVE-2019-16098 vulnerability in the MSI Afterburner driver. However, I have always found hands-on practice to be the most effective way for me to comprehend complex concepts, so even though I'm a blue teamer, I thought it would be interesting to rewrite the code from scratch, using their code as a reference, and add some extra functionality to see if I really understood it all.  
 
@@ -25,7 +23,7 @@ Also check out my previous post on setting up a kernel debugging environment and
 
 In Part 1, I'll start by explaining how drivers actually work, giving you the lowdown on the RTCore64 vulnerability, and showing you how to exploit it.  
 
-# <a name="2_drivers"></a> 2. Windows driver basics  
+# 2. Windows driver basics  
 ---
 There are three types of Windows drivers: bus drivers, function drivers, and filter drivers. In this section, we'll focus on function drivers, which serve as the primary drivers for devices and are typically developed by the device vendors themselves. These drivers are responsible for managing input/output (I/O) operations for devices and provide an operational interface for them, handling read and write requests to the device.  
 
@@ -253,7 +251,7 @@ NTSTATUS IrpDeviceIoCtlHandler(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 
 ```
 
-# <a name="3_driver_security"></a> 3. Securing access to drivers  
+# 3. Securing access to drivers  
 ---
 When a driver creates its device object using `IoCreateDevice`, by default, the access to the driver is unrestricted, allowing anyone to send requests to it (if a symbolic link is also present). However, since drivers may provide powerful functionality that can be misused by unprivileged users, it is advisable to secure access in some way.  
 
@@ -268,7 +266,7 @@ Furthermore, during runtime, more fine-grained control over which users can requ
 
 We now have the necessary knowledge to delve into the driver's internals and analyze the vulnerabilities it has.  
 
-# <a name="4_rtcore64"></a> 4. Analyzing RTCore64  
+# 4. Analyzing RTCore64  
 ---
 To download and install the driver, follow the steps outlined in [PPLControl](https://github.com/itm4n/PPLcontrol) repository.  
 You can download the driver itself from the [PPLKiller](https://github.com/RedCursorSecurityConsulting/PPLKiller/tree/master/driver) repo. Note that we will focus on the 64-bit version of the driver.  
@@ -342,7 +340,7 @@ The handling of the IRP also includes additional checks. The value at field 0x2c
 
 ![Ghidra analysis 7](https://idafchev.github.io/blog/assets/images/driver_vulnerability/Ghidra_6.png){: .align-center}  
 
-# <a name="5_interacting"></a> 5. Interacting with RTCore64  
+# 5. Interacting with RTCore64  
 ---
 To begin exploring how tools like PPLKiller work, we need to write a simple program that can interact with the vulnerable driver using the provided IOCTLs. The code provided here is based on the PPLControl source code, but adapted for C without using objects.  
 
@@ -605,7 +603,7 @@ This vulnerability turned out to be quite trivial and easy to exploit. Other dri
 
 While writing these posts and researching the different driver vulnerabilities, I read somewhere that it's common to find vulnerabilities in drivers that interact with hardware - measuring cpu temperature, overclocking, etc. I decided to try and find one on my own and what do you know - I found my first ever vulnerability. The third driver I checked had several vulnerabilities which were easy to spot even for someone new to this as me. I notified the vendor and I'm currently waiting for them to check it. I recommend checking the articles in the references, as they explore other drivers and vulnerabilities.  
 
-# <a name="6_references"></a> 6. References  
+# 6. References  
 ---
 1. [https://github.com/itm4n/PPLcontrol](https://github.com/itm4n/PPLcontrol)  
 2. [https://github.com/RedCursorSecurityConsulting/PPLKiller](https://github.com/RedCursorSecurityConsulting/PPLKiller)  
