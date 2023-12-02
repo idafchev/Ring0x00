@@ -1,8 +1,14 @@
 ---
 date:   2017-06-30 15:12:01 -0600
-tags: [posts]
 excerpt: "Cmubomb challenge writeup from the Modern Binary Exploitation course."
 title:  "Basic Reverse Engineering (writeup) - Part 0x02"
+toc: true
+tags:
+  - posts
+  - http
+  - Steganography
+  - protocol
+  - c2
 ---
 
 # Introduction
@@ -11,7 +17,7 @@ I've started a course on [Modern Binary Exploitation](http://security.cs.rpi.edu
 
 This (as you can see) is the third post and it will focus on the `cmubomb` challenge from the "Extended Reverse Engineering" class.
 
-### If you plan to take the course I highly encourage you not to read any further and try to solve the challenges yourself. You'll learn much more that way.
+**If you plan to take the course I highly encourage you not to read any further and try to solve the challenges yourself. You'll learn much more that way.**
 
 For some of the challenges you don't need to look at every assembly instruction but just looking at the function calls and byte/string comparisons you can immediately understand what input is expected without reversing the whole thing.
 
