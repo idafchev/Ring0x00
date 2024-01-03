@@ -242,7 +242,7 @@ In this case, there are no missing modules, instead the script uses the "socket"
 ```python
 class socket(_socket.socket):
  	def __init__(self):
-     	pass
+     		pass
 ```
 
 6. Run again:  
@@ -253,7 +253,7 @@ class socket(_socket.socket):
    File "client8.py", line 8, in start_client
  AttributeError: module 'socket' has no attribute 'AF_INET'
 ```
-   I don't know how to properly define AF_INET, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.
+I don't know how to properly define AF_INET, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.  
 ```python
 import _socket
 from _socket import *
@@ -262,7 +262,6 @@ class socket(_socket.socket):
 	def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
 		pass
 ```
-
 7. Running again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
@@ -271,8 +270,7 @@ class socket(_socket.socket):
    File "client8.py", line 9, in start_client
  OSError: connect(): bad family
 ```
-
-   I will add the rest of the `__init__` method and then define the `connect()` method:  
+I will add the rest of the `__init__` method and then define the `connect()` method:  
 ```python
 import _socket
 from _socket import *
@@ -293,7 +291,6 @@ class socket(_socket.socket):
  	def connect(self):
      		pass
 ```
-
 8. Running again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
@@ -302,9 +299,8 @@ class socket(_socket.socket):
    File "client8.py", line 9, in start_client
  TypeError: socket.connect() takes 1 positional argument but 2 were given
 ```
-
-   I added the argument and a print function to show what is passed to the `connect()` method.
-```python         
+I added the argument and a print function to show what is passed to the `connect()` method.
+```python
  	def connect(self, arg):
      		print(arg)
 ```
