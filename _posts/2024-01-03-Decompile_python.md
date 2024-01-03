@@ -15,7 +15,8 @@ tags:
 If you ever needed to decompile python `.pyc` files, then you know that versions `3.9` and above might be a bit problematic to deal with using the well known tools.
 In this blog post I'll explain my approach at dealing with such samples, but for completenes I'll also briefly go though the general approach with `pyinstaller` binaries.
 
-# General approach
+# General approach  
+---
 1. Find the python version  
    Search for strings containing `"python"`.
    You'll easily spot the python version with which it was compiled.  
@@ -38,7 +39,8 @@ In this blog post I'll explain my approach at dealing with such samples, but for
 
 These tools are usually working fine with python versions up to `3.8` or `3.9`, but may have a problem decompiling newer python versions.  
 
-# Decompiling python above 3.9
+# Decompiling python above 3.9  
+---
 In cases where the above-mentioned tools fail, I resort to `pycdc` with a bit of a manual approach.
 I always make sure I work with the latest `pycdc`, meaning that I have to compile it myself. The steps are the following:
 
@@ -54,11 +56,12 @@ cmake . msbuild pycdc.sln
 7. The executable will be inside the "Debug" folder
 
 Let's test it against a file compiled with python `3.10`  
+
 ![pycdc_fail_1](https://idafchev.github.io/blog/assets/images/decompile_python/pycdc_fail_1.png){: .align-center}  
 
-An exception about an Unsupported opcode is thrown.
+An exception about an `Unsupported opcode` is thrown.
 To deal with this, you can add "fake" support for this opcode. That way you bypass the error and decompilation will continue, although it may output wrong python code.
-In my experience, even if the code is wrong it's usually readable and correct enough to understand what it's doing. After all I don't need a running code, I just need to know what it does.
+In my experience, even if the code is wrong it's usually readable and correct enough to understand what it's doing. After all, I don't need a running code, I just need to know what it does.
 
 To add such fake support, just add the mentioned opcode as a case statement inside `ASTree.cpp`. I usually add it at the end, before the default case, so I can easily find my modifications. The content of the `case` should have `break` for a body, like so:
 ```c
@@ -89,7 +92,7 @@ Or you could try to add proper support if you check the [documenation for the op
 		return new ASTNodeList(defblock->nodes());
 ```
 
-Testing it again, we get another unsupporeted opcode. You repeat the process until you add support for all necessary opcodes.  
+Testing it again, we get another unsupported opcode. You repeat the process until you add support for all necessary opcodes and decompilation proceeds uninterrupted.  
 ![pycdc_fail_2](https://idafchev.github.io/blog/assets/images/decompile_python/pycdc_fail_2.png){: .align-center}  
 
 Another way, without adding each failing opcode one by one, is to just add 	`break` in the default case, under `fprintf`. 
@@ -101,7 +104,8 @@ default:
 	return new ASTNodeList(defblock->nodes());
 ```
 
-This will have the same effect and will also print to the console all unsupporeted opcodes. 
+This will have the same effect and will also print to the console all unsupporeted opcodes.  
+
 ![pycdc_defualt_break](https://idafchev.github.io/blog/assets/images/decompile_python/pycdc_break.png){: .align-center}  
 
 Having all the unsupported opcodes listed is helpful in cases where `pycdc` crashes and you want to add proper support for them. Or if you want to add proper support, so the decompiled code is better.
@@ -115,7 +119,8 @@ Generally what I do is:
 4. After some trial and error, I have a code with questionable quality, which does the trick and at least produces results 
 
 Sometimes I might encounter a different type of exception.
-For example, let's run it against a file compiled with the latest python version. At the time of writing this is `3.12`
+For example, let's run it against a file compiled with the latest python version. At the time of writing this is `3.12`  
+
 ![pycdc_py312](https://idafchev.github.io/blog/assets/images/decompile_python/pycdc_py312.png){: .align-center}  
 
 It produces `invalid vector subscript` exception.
@@ -136,7 +141,7 @@ You could debug the code or use `printf` statements under each `case`. I used no
 Find: "        case Pyc::\w+:\n\s{9,}"
 Replace: "$&DEBUG_PRINT\("DEBUG, LINE:%d\\n", __LINE__\);\n\s            "
 ```
-
+Like so:  
 ![NPP](https://idafchev.github.io/blog/assets/images/decompile_python/npp.png){: .align-center}  
 
 `$&` is replaced with the matched sequence (the `case` line), meaning that the end result of the operation is appending the debug line under the `case`.  
@@ -159,14 +164,22 @@ Building and running the new executable shows that the error occurs inside the h
 The [documentaion for this opcode](https://docs.python.org/3/library/dis.html#opcode-LOAD_ATTR) states the following:  
 ```
 LOAD_ATTR(namei)
-If the low bit of namei is not set, this replaces STACK[-1] with getattr(STACK[-1], co_names[namei>>1]).
+If the low bit of namei is not set, this replaces STACK[-1] with
+getattr(STACK[-1],co_names[namei>>1]).
 
-If the low bit of namei is set, this will attempt to load a method named co_names[namei>>1] from the STACK[-1] object. STACK[-1] is popped. This bytecode distinguishes two cases: if STACK[-1] has a method with the correct name, the bytecode pushes the unbound method and STACK[-1]. STACK[-1] will be used as the first argument (self) by CALL when calling the unbound method. Otherwise, NULL and the object returned by the attribute lookup are pushed.
+If the low bit of namei is set, this will attempt to load a
+method named co_names[namei>>1] from the STACK[-1] object.
+STACK[-1] is popped. This bytecode distinguishes two cases: if STACK[-1]
+has a method with the correct name, the bytecode pushes the unbound
+method and STACK[-1]. STACK[-1] will be used as the first argument (self)
+by CALL when calling the unbound method. Otherwise, NULL and the object
+returned by the attribute lookup are pushed.
 
-Changed in version 3.12: If the low bit of namei is set, then a NULL or self is pushed to the stack before the attribute or unbound method respectively.
+Changed in version 3.12: If the low bit of namei is set, then a NULL or
+self is pushed to the stack before the attribute or unbound method respectively.
 ```
 
-Notice that the documentation states in both caes the operand `namei` should be shifted right by 1 `namei>>1`. But in the code (shown below) the oprand is used as is.
+Notice that the documentation states in both caes the operand `namei` should be shifted right by 1 `namei>>1`. But in the code (shown below) the oprand is used as is (without shift).
 ```c
 case Pyc::LOAD_ATTR_A:
 	{
@@ -183,11 +196,13 @@ As stated in the documenation, the behavior of this opcode has changed a bit in 
 
 
 Another exception you might encounter is `"Bad MAGIC!"`. To deal with that, make sure the result of pyinxtractor is a correct PYC file (check it in a hex editor). The PYC file format starts with 4 bytes of magic bytes, followed by up to several header fields (depends on the python version used), and a marshalled code object. The 3rd and 4th magic byte should be `\x0D\x0A` respectively. The marshalled code-object starts with a byte which when `AND-ed` with `0x7F` should be equal to `0x63`. Below is an example of a proper PYC file:  
+
 ![pyc](https://idafchev.github.io/blog/assets/images/decompile_python/pyc.png){: .align-center}  
 
 If the proper header is missing or the magic is wrong, you could try fixing it yourself by adding/replacing with a header of a known good file (compiled with the same python version). Most of the times I fixed this error by just using the latest pyinxtractor and using the correct python version.  
 
-# Dealing with pyarmor
+# Dealing with pyarmor  
+---
 This is a separate topic, but I wanted to add it here, because the methods used to deal with pyarmor are also useful for analyzing PYC files you can't decompile. After all, in both cases you don't have access to the actual souce code, so you can use similar methods for analysis.  
 
 ## Dynamic way
@@ -230,7 +245,7 @@ class socket(_socket.socket):
      	pass
 ```
 
-Run again:
+   Run again:
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -238,7 +253,7 @@ Run again:
    File "client8.py", line 8, in start_client
  AttributeError: module 'socket' has no attribute 'AF_INET'
 ```
-I don't know how to properly define AF_INET, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.
+   I don't know how to properly define AF_INET, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.
 
 ```python
 import _socket
@@ -249,7 +264,7 @@ class socket(_socket.socket):
 		pass
 ```
 
-Running again:
+   Running again:
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -258,7 +273,7 @@ Running again:
  OSError: connect(): bad family
 ```
 
-I will add the rest of the `__init__` method and then define the `connect()` method:
+   I will add the rest of the `__init__` method and then define the `connect()` method:
 ```python
 import _socket
 from _socket import *
@@ -280,7 +295,7 @@ class socket(_socket.socket):
      	pass
 ```
 
-Running again:
+   Running again:
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -289,13 +304,13 @@ Running again:
  TypeError: socket.connect() takes 1 positional argument but 2 were given
 ```
 
-I added the argument and a print function to show what is passed to the `connect()` method.
+   I added the argument and a print function to show what is passed to the `connect()` method.
 ```python         
  	def connect(self, arg):
      	print(arg)
 ```
 
-Running it again, we get the IP and the port to which it will connect:
+   Running it again, we get the IP and the port to which it will connect:
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  ('192.168.1.30', 5555)
