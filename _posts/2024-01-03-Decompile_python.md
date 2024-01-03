@@ -59,7 +59,7 @@ Let's test it against a file compiled with python `3.10`
 
 ![pycdc_fail_1](https://idafchev.github.io/blog/assets/images/decompile_python/pycdc_fail_1.png){: .align-center}  
 
-An exception about an `Unsupported opcode` is thrown.
+An error about an `Unsupported opcode` is thrown.
 To deal with this, you can add "fake" support for this opcode. That way you bypass the error and decompilation will continue, although it may output wrong python code.
 In my experience, even if the code is wrong it's usually readable and correct enough to understand what it's doing. After all, I don't need a running code, I just need to know what it does.
 
@@ -118,7 +118,7 @@ Generally what I do is:
 3. Try to implement the opcode using my combined understanding of the python docs and the pycdc code
 4. After some trial and error, I have a code with questionable quality, which does the trick and at least produces results 
 
-Sometimes I might encounter a different type of exception.
+Sometimes I might encounter a different type of error.
 For example, let's run it against a file compiled with the latest python version. At the time of writing this is `3.12`  
 
 ![pycdc_py312](https://idafchev.github.io/blog/assets/images/decompile_python/pycdc_py312.png){: .align-center}  
