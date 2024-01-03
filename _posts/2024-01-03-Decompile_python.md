@@ -253,8 +253,10 @@ class socket(_socket.socket):
    File "client8.py", line 8, in start_client
  AttributeError: module 'socket' has no attribute 'AF_INET'
 ```
-I don't know how to properly define AF_INET, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.  
-```
+
+I don't know how to properly define `AF_INET`, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.  
+
+```python
 import _socket
 from _socket import *
 
@@ -263,7 +265,7 @@ class socket(_socket.socket):
 		pass
 ```
 
-7. Running again:  
+Running again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -292,7 +294,8 @@ class socket(_socket.socket):
  	def connect(self):
      		pass
 ```
-8. Running again:  
+
+Running again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -306,7 +309,7 @@ I added the argument and a print function to show what is passed to the `connect
      		print(arg)
 ```
 
-9. Running it again, we get the IP and the port to which it will connect:  
+Running it again, we get the IP and the port to which it will connect:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  ('192.168.1.30', 5555)
