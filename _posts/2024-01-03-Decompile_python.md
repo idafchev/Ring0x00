@@ -17,26 +17,24 @@ In this blog post I'll explain my approach at dealing with such samples, but for
 
 # General approach
 1. Find the python version  
-Search for strings containing `"python"`.
-You'll easily spot the python version with which it was compiled.
-
-![strings](https://idafchev.github.io/blog/assets/images/decompile_python/strings.png){: .align-center}  
+   Search for strings containing `"python"`.
+   You'll easily spot the python version with which it was compiled.  
+   ![strings](https://idafchev.github.io/blog/assets/images/decompile_python/strings.png){: .align-center}  
 
 2. Install that EXACT same version of python  
 3. Download the latest version of [pyinstxtractor](https://github.com/extremecoders-re/pyinstxtractor)  
-If I had a problem with the extracted pyc files, usually downloading the latest version of pyinstxtractor fixes the issue, so don't skip this step.
+   If I had a problem with the extracted pyc files, usually downloading the latest version of pyinstxtractor fixes the issue, so don't skip this step.
 4. Use pyinstxtractor to extract the compiled python code from the executable  
-Run `pyinstxtractor` with the same python version (the one just downloaded) with which the code was compiled.  
-![pyinstxtractor](https://idafchev.github.io/blog/assets/images/decompile_python/pyinstxtractor.png){: .align-center}  
+   Run `pyinstxtractor` with the same python version (the one just downloaded) with which the code was compiled.  
+   ![pyinstxtractor](https://idafchev.github.io/blog/assets/images/decompile_python/pyinstxtractor.png){: .align-center}  
 
-The script will extract all compiled modules and even suggest you the entry point.
-
+   The script will extract all compiled modules and even suggest you the entry point.
 5. Use a python decompiler to decompile the pyc file.  
-At the time of writing, the well known tools for this task are:  
-- [decompyle3](https://github.com/rocky/python-decompile3)  
-- [uncompyle6](https://github.com/rocky/python-uncompyle6)  
-- [pycdc](https://github.com/zrax/pycdc)  
-- [pydumpck](https://github.com/serfend/pydumpck)  
+   At the time of writing, the well known tools for this task are:  
+   - [decompyle3](https://github.com/rocky/python-decompile3)  
+   - [uncompyle6](https://github.com/rocky/python-uncompyle6)  
+   - [pycdc](https://github.com/zrax/pycdc)  
+   - [pydumpck](https://github.com/serfend/pydumpck)  
 
 These tools are usually working fine with python versions up to `3.8` or `3.9`, but may have a problem decompiling newer python versions.  
 
