@@ -292,7 +292,7 @@ class socket(_socket.socket):
      	self._closed = False
          
  	def connect(self):
-     	pass
+     		pass
 ```
 
    Running again:
