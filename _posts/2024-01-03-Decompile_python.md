@@ -321,7 +321,7 @@ class socket(_socket.socket):
 ```
   
 ## Custom CPython interpreter
-Re-compile CPython to dump byte code at PyEval_EvalFrameDefault(). This function executes the python byte-code, therefore it should be in a state after pyarmor protections.
+Re-compile CPython to dump byte code at `PyEval_EvalFrameDefault()`. This function executes the python byte-code, therefore it should be in a state after pyarmor protections.
 To understand CPython source code and how to compile it I highly recommend checking [CPython source code guide](https://realpython.com/cpython-source-code-guide/). And for the necessary modifications I recommend [this youtube video](https://youtu.be/1Q6Mti0mRao?t=3075) and [FLARE-ON9-Chal11_Unpacking-Pyarmor](https://github.com/levanvn/FLARE-ON9-Chal11_Unpacking-Pyarmor) (but also check the other links in the Resources section).  
 
 For the purpose of analyzing python scripts which are not protected by pyarmor, but you just can't decompile, you could modify CPython to print the contents of strings, byte-strings, etc. every time they're initialized, used or changed. String objects and their methods are defined in `unicodeobject.c`. 
