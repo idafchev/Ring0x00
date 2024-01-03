@@ -325,7 +325,7 @@ To understand CPython source code and how to compile it I highly recommend check
 
 This approach can also be used for scripts you can't decompile. You could modify CPython to print the contents of strings (or other data types) every time they're initialized, used or changed. String objects and their methods are defined in `unicodeobject.c`. 
 
-I made my own custom python interpreter by modifying all relevand methonds in `unicodeobject.c` to print the string object contents after every operation. Depending on the data type you could print the string directly, or you might have to convert it first using the appropriate methods:
+I made my own custom python interpreter by modifying all relevant methods in `unicodeobject.c` to print the string object contents after every operation. Depending on the data type you could print the string directly, or you might have to convert it first using the appropriate methods:
 ```c
 printf("STRING: %.*s\n", (int)size, s);
 printf("STRING: %s\n", PyUnicode_DATA(PyUnicode_FromObject(unicode_obj)));
