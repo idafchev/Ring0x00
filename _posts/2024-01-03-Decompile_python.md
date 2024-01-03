@@ -333,7 +333,7 @@ printf("STRING: %s\n", PyUnicode_DATA(unicode));
 ```
 
 For example:
-```
+```c
 static Py_hash_t
 unicode_hash(PyObject *self)
 {
