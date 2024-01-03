@@ -254,7 +254,6 @@ class socket(_socket.socket):
  AttributeError: module 'socket' has no attribute 'AF_INET'
 ```
    I don't know how to properly define AF_INET, but fortunately [the socket.py source code](https://github.com/python/cpython/blob/3.12/Lib/socket.py) is available, so I can properly re-implement it.
-
 ```python
 import _socket
 from _socket import *
@@ -273,7 +272,7 @@ class socket(_socket.socket):
  OSError: connect(): bad family
 ```
 
-   I will add the rest of the `__init__` method and then define the `connect()` method:
+   I will add the rest of the `__init__` method and then define the `connect()` method:  
 ```python
 import _socket
 from _socket import *
