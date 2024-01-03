@@ -307,7 +307,7 @@ class socket(_socket.socket):
    I added the argument and a print function to show what is passed to the `connect()` method.
 ```python         
  	def connect(self, arg):
-     	print(arg)
+     		print(arg)
 ```
 
    Running it again, we get the IP and the port to which it will connect:
