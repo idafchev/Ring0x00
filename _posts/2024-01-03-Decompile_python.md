@@ -324,9 +324,9 @@ class socket(_socket.socket):
 Re-compile CPython to dump byte code at `PyEval_EvalFrameDefault()`. This function executes the python byte-code, therefore it should be in a state after pyarmor protections.
 To understand CPython source code and how to compile it I highly recommend checking [CPython source code guide](https://realpython.com/cpython-source-code-guide/). And for the necessary modifications I recommend [this youtube video](https://youtu.be/1Q6Mti0mRao?t=3075) and [FLARE-ON9-Chal11_Unpacking-Pyarmor](https://github.com/levanvn/FLARE-ON9-Chal11_Unpacking-Pyarmor) (but also check the other links in the Resources section).  
 
-For the purpose of analyzing python scripts which are not protected by pyarmor, but you just can't decompile, you could modify CPython to print the contents of strings, byte-strings, etc. every time they're initialized, used or changed. String objects and their methods are defined in `unicodeobject.c`. 
+This approach can also be used for scripts you can't decompile. You could modify CPython to print the contents of strings (or other data types) every time they're initialized, used or changed. String objects and their methods are defined in `unicodeobject.c`. 
 
-I made my own custom python interpreter by modifying all relevand methonds in `unicodeobject.c` to print the string. Depending on the data type you could print the data directly, or you might have to convert it first using the appropriate methods:
+I made my own custom python interpreter by modifying all relevand methonds in `unicodeobject.c` to print the string object contents after every operation. Depending on the data type you could print the string directly, or you might have to convert it first using the appropriate methods:
 ```c
 printf("STRING: %.*s\n", (int)size, s);
 printf("STRING: %s\n", PyUnicode_DATA(PyUnicode_FromObject(unicode_obj)));
