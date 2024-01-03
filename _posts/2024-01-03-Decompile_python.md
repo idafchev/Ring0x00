@@ -219,7 +219,7 @@ It boils down to the following:
   6. Repeat until you have everythin you need. The errors on each run tell you what you need to implement and intercept.
 
 Example:
-1. Run the script:
+1. Run the script:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -228,9 +228,9 @@ Example:
  OSError: [WinError 10051] A socket operation was attempted to an unreachable network
 ```
 In this case, there are no missing modules, instead the script uses the "socket" module which is part of the Python Standard Library and it gets loaded from the default python installation.
-2. I'll intercept the socket module to check what kind of connection it will make.
-3. Create `socket.py` with content `pass` and run again.
-4. Runnig the PYC again
+2. I'll intercept the socket module to check what kind of connection it will make.  
+3. Create `socket.py` with content `pass` and run again.  
+4. Runnig the PYC again  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -238,14 +238,14 @@ In this case, there are no missing modules, instead the script uses the "socket"
    File "client8.py", line 8, in start_client
  AttributeError: module 'socket' has no attribute 'socket'
 ```
-5. Implement the socket class
+5. Implement the socket class  
 ```python
 class socket(_socket.socket):
  	def __init__(self):
      	pass
 ```
 
-   Run again:
+6. Run again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -264,7 +264,7 @@ class socket(_socket.socket):
 		pass
 ```
 
-   Running again:
+7. Running again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -295,7 +295,7 @@ class socket(_socket.socket):
      		pass
 ```
 
-   Running again:
+8. Running again:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  Traceback (most recent call last):
@@ -310,7 +310,7 @@ class socket(_socket.socket):
      		print(arg)
 ```
 
-   Running it again, we get the IP and the port to which it will connect:
+9. Running it again, we get the IP and the port to which it will connect:  
 ```
 >"C:\Program Files\Python312\python.exe" client8.pyc
  ('192.168.1.30', 5555)
