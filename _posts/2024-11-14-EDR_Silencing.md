@@ -32,7 +32,7 @@ Identifying specific IP addresses for each EDR can be inconvenient, as these IPs
 
 To address this, I developed a PowerShell script ([IPMute](https://github.com/idafchev/IPMute/blob/main/ipmute.ps1)) that continuously monitors a specified list of processes for TCP connections, captures each connection’s remote address, and assigns it as a secondary IP address on all active physical adapters. Upon exiting with `CTRL+C`, the script performs a cleanup, removing all blocked IP addresses.
 
-You need to let it run for a while to make sure all IP addresses are discovered by the script.  
+You need to let it run for a while to make sure all IP addresses are discovered by the script. The example below targets normal processes as I don't want to give examples with an actual product.  
 
 ![IPMute](https://idafchev.github.io/blog/assets/images/edr_silencing/ip_mute.png){: .align-center}  
 
