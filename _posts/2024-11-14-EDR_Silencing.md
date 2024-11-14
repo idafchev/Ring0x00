@@ -77,7 +77,7 @@ netsh ipsec static add filteraction name=BlockFilterAction action=block
 netsh ipsec static add rule name=BlockRule policy=BlockPolicy filterlist=BlockFilterList filteraction=BlockFilterAction description="IPSec Block Rule"
 ```
 
-Because I hate writing batch, I asked ChatGPT to create a general script with a configurable list of IP addresses, IP ranges, or domain names, which are subsequently blocked via IPSec filter rules. Any empty list is ignored - [IPSecFilter](https://github.com/idafchev/IPSecFilter/blob/main/ipsecfilter.bat)  
+Because I hate writing batch, I asked ChatGPT to create a general script with a configurable list of IP addresses, IP ranges, or domain names, which are subsequently blocked via IPSec filter rules. Any empty list is ignored - [IPSecFilter](https://github.com/idafchev/IPSecFilter/blob/main/ipsecfilter.bat).  
 
 To list all ipsec filter rules:  
 ```bat
@@ -97,7 +97,7 @@ The process which adds the registry values is `netsh`.
 
 Because configuration is stored in registry, it means that it could be made ineffective with the technique discussed in the Huntress article meantioned in previous section.
 
-I couldn't find if IPSec filters can be configured programmatically using the Windows Filtering Platform (WFP) API or another API, but this could be a promising for further research.
+I couldn't find if IPSec filters can be configured programmatically using the Windows Filtering Platform (WFP) API or another API, but this could be promising for further research.
 
 # DNS Sinkholing
 ## Adding the EDR domains to the hosts file
