@@ -22,9 +22,11 @@ To silence an EDR, you need to identify the IP addresses it communicates with. O
 
 To manually add a secondary IP address, go to:  
 `Adapter Properties > IPv4 > Properties > Advanced > IP Settings`  
+
 ![Assigning Secondary IP](https://idafchev.github.io/blog/assets/images/edr_silencing/secondary_ip.png){: .align-center}  
 
-Note: If the network adapter is set to obtain its IP address automatically via DHCP, secondary addresses cannot be added. In this case, you must convert the adapter configuration to use static IP addressing by copying the current network settings. {: .notice--info}
+**Note:** If the network adapter is set to obtain its IP address automatically via DHCP, secondary addresses cannot be added. In this case, you must convert the adapter configuration to use static IP addressing by copying the current network settings.
+{: .notice--info}
 
 Identifying specific IP addresses for each EDR can be inconvenient, as these IPs may change frequently or use failover IPs for redundancy. To streamline this process, it’s more effective to block connections based on process names rather than individual IP addresses.  
 
@@ -32,7 +34,7 @@ To address this, I developed a PowerShell script ([IPMute](https://github.com/id
 
 You need to let it run for a while to make sure all IP addresses are discovered by the script.  
 
-![IPMute](https://idafchev.github.io/blog/assets/images/edr_silencing/powershell_script.png){: .align-center}  
+![IPMute](https://idafchev.github.io/blog/assets/images/edr_silencing/ip_mute.png){: .align-center}  
 
 ![IPMute result](https://idafchev.github.io/blog/assets/images/edr_silencing/secondary_ip_2.png){: .align-center}  
 
@@ -57,7 +59,8 @@ Additionally, it is possible to add secondary IP addresses directly in the regis
 # IPSec filter rules
 It's not new that IPSec filter rules can be used to filter traffic, even if you don't have IPSec configured (you can check the blog "[Windows IPSEC for endpoint quarantine](https://mgreen27.github.io/posts/2020/07/23/IPSEC.html)" for more information). Therefore such rules can also be used for the malicious purpose to block EDR communication. An example of how to use the `netsh` command to set IPSec filter rules is shown below. 
 
-The filterlist can also accept domain names, but what actually happens is that several rules are created which block all IPs to which the domain currently resolves to.{: .notice}
+The filterlist can also accept domain names, but what actually happens is that several rules are created which block all IPs to which the domain currently resolves to.
+{: .notice--info}
 
 ```bat
 netsh ipsec static add policy name=BlockPolicy description=BlockPolicy
