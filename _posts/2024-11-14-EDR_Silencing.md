@@ -24,7 +24,7 @@ To manually add a secondary IP address, go to:
 `Adapter Properties > IPv4 > Properties > Advanced > IP Settings`  
 ![Assigning Secondary IP](https://idafchev.github.io/blog/assets/images/edr_silencing/secondary_ip.png){: .align-center}  
 
-Note: If the network adapter is set to obtain its IP address automatically via DHCP, secondary addresses cannot be added. In this case, you must convert the adapter configuration to use static IP addressing by copying the current network settings.{: .notice}
+Note: If the network adapter is set to obtain its IP address automatically via DHCP, secondary addresses cannot be added. In this case, you must convert the adapter configuration to use static IP addressing by copying the current network settings. {: .notice--info}
 
 Identifying specific IP addresses for each EDR can be inconvenient, as these IPs may change frequently or use failover IPs for redundancy. To streamline this process, it’s more effective to block connections based on process names rather than individual IP addresses.  
 
