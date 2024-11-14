@@ -42,7 +42,7 @@ Static IP settings are stored in the following Registry value:
 ```
 HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{GUID}\IPAddress
 ```  
-This means that this technique could potentially be detected and reverted in a similar manner to the one outlined in the Huntress article, "[Silencing the EDR Silencers](https://www.huntress.com/blog/silencing-the-edr-silencers)"  
+This means that this technique could potentially be made ineffective in a similar manner to the one outlined in the Huntress article, "[Silencing the EDR Silencers](https://www.huntress.com/blog/silencing-the-edr-silencers)".  
 
 Depending how the secondary IP addresses are added, the registry values are modified by a different process:  
 - `wmiprvse.exe` if addresses were added with powershell cmdlets.  
@@ -95,7 +95,7 @@ HKLM\Software\Policies\Microsoft\Windows\IPSec\Policy\Local\ipsecFilter{GUID}\ip
 ```  
 The process which adds the registry values is `netsh`.
 
-This technique may be detectable and reversible, as discussed in the Huntress article meantioned in previous section.
+Because configuration is stored in registry, it means that it could be made ineffective with the technique discussed in the Huntress article meantioned in previous section.
 
 I couldn't find if IPSec filters can be configured programmatically using the Windows Filtering Platform (WFP) API or another API, but this could be a promising for further research.
 
