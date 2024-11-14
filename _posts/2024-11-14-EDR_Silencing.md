@@ -12,7 +12,7 @@ tags:
 ---
 # Introduction  
 ---
-Using the Windows Filtering Platform (WFP) APIs or creating specific Windows Firewall rules are well-known methods to silence EDRs. Popular tools using WFP for silencing are [EDRSilencer](https://github.com/netero1010/EDRSilencer), [Shutter](https://github.com/dsnezhkov/shutter), [EDRPrison](https://github.com/senzee1984/EDRPrison). But recently, a colleague shared a paper with me detailing an alternative approach to silence EDRs which piqued my interest and led me to explore other potential methods for disrupting EDR communication on my own.  
+Using the Windows Filtering Platform (WFP) APIs or creating specific Windows Firewall rules are well-known methods to silence EDRs. Popular tools using for silencing are [EDRSilencer](https://github.com/netero1010/EDRSilencer), [Shutter](https://github.com/dsnezhkov/shutter), [EDRPrison](https://github.com/senzee1984/EDRPrison). But recently, a colleague shared a paper with me detailing an alternative approach to silence EDRs which piqued my interest and led me to explore other potential methods for disrupting EDR communication on my own.  
 
 # Sinkholing by assigning secondary IP addresses  
 ---
