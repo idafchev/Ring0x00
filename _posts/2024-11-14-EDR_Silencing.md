@@ -119,6 +119,7 @@ If you block the EDR domains in OpenDNS, then set the local host DNS settings to
 But it has the same disadvantage. The remote IPs may have alraedy been cached in the process itself and you may have to wait for extended period of time or a re-boot for the EDR process to start using the new IP.
 
 # Resources
+---
 1. [Silencing the EDR Silencers](https://www.huntress.com/blog/silencing-the-edr-silencers)  
 2. [EDRSilencer project](https://github.com/netero1010/EDRSilencer)  
 3. [Shutter project](https://github.com/dsnezhkov/shutter)  
