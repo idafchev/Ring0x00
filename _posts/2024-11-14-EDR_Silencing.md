@@ -57,6 +57,7 @@ These specifics could be useful in creating detections for scripted IP configura
 Additionally, it is possible to add secondary IP addresses directly in the registry. However, in my testing, changes to this registry setting did not take effect unless I manually disabled and then re-enabled the network interface. Could be interesting to reverse how the Windows commands are assigning them without disable/re-enable of the interface. Maybe it's possible to do it programatically.    
 
 # IPSec filter rules
+---
 It's not new that IPSec filter rules can be used to filter traffic, even if you don't have IPSec configured (you can check the blog "[Windows IPSEC for endpoint quarantine](https://mgreen27.github.io/posts/2020/07/23/IPSEC.html)" for more information). Therefore such rules can also be used for the malicious purpose to block EDR communication. An example of how to use the `netsh` command to set IPSec filter rules is shown below. 
 
 The filterlist can also accept domain names, but what actually happens is that several rules are created which block all IPs to which the domain currently resolves to.
@@ -100,6 +101,7 @@ Because configuration is stored in registry, it means that it could be made inef
 I couldn't find if IPSec filters can be configured programmatically using the Windows Filtering Platform (WFP) API or another API, but this could be promising for further research.
 
 # DNS Sinkholing
+---
 ## Adding the EDR domains to the hosts file
 Again, nothing new here. Research what domains the target EDR is connecting to and add them to the hosts file, directing them to `127.0.0.1`.
 
