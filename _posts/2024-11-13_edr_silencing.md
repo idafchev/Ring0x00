@@ -1,5 +1,5 @@
 ---
-date:   2024-11-14
+date:   2024-11-13
 title:  "Alternative ways for EDR Silencing"
 excerpt: "Assigning secondary IP addresses and IPSec filter rules to block EDR communication"
 toc: true
