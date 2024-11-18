@@ -100,6 +100,9 @@ Because configuration is stored in registry, it means that it could be made inef
 
 I couldn't find if IPSec filters can be configured programmatically using the Windows Filtering Platform (WFP) API or another API, but this could be promising for further research.
 
+They could be configured through GUI using the IPSec snap-in from the Local Security Policy MMC. In this case the process responsible for writing to the registry key is `mmc.exe`.  
+![IPSecPol](https://idafchev.github.io/blog/assets/images/edr_silencing/ipsec_secpol.png){: .align-center}  
+
 # DNS Sinkholing
 ---
 ## Adding the EDR domains to the hosts file
